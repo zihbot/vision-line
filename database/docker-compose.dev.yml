@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13-alpine  
+    environment:
+      POSTGRES_DB: vision_line
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - mongodb:/var/lib/postgresql/data
+volumes:
+  mongodb:
