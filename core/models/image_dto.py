@@ -1,0 +1,3 @@
+class PostCreateImageInElem:
+    name: str
+
