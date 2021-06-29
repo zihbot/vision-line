@@ -1,4 +1,5 @@
 import io
+from collections import namedtuple
 from flask.helpers import send_file
 import controllers.image
 
