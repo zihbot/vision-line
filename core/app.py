@@ -1,6 +1,8 @@
+from function_factory import FunctionFactory
 import io
 from collections import namedtuple
 from flask.helpers import send_file
+from flask import jsonify
 import controllers.image
 
 from flask import Flask, request
@@ -8,6 +10,8 @@ app = Flask(__name__)
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
+
+FunctionFactory.init()
 
 @app.route('/')
 def hello_world():
@@ -28,3 +32,7 @@ def get_image(line_id: str):
     buffer = io.BytesIO(bytes)
     buffer.seek(0)
     return send_file(buffer, attachment_filename='image.jpg', mimetype='image/jpeg')
+
+@app.route('/function/', methods=['GET'])
+def get_functions():
+    return jsonify({'functions': FunctionFactory.get_all_function_names()})

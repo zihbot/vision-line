@@ -1,10 +1,15 @@
+from os import name
 import cv2
 import numpy as np
+import yaml
 
 class BaseFunction():
-    def __init__(self) -> None:
-        self.name = "base"
-        self.is_visible = False
+    def __init__(self, path: str) -> None:
+        self.data = yaml.load(open('../functions/' + path + '.yaml'))
+        self.name = self.data['name']
     
-    def run(self, img: np.ndarray) -> np.ndarray:
-        raise NotImplementedError()
+    def run(self, img_loc: np.ndarray) -> np.ndarray:
+        global img
+        img = img_loc
+        exec(self.data['run'], globals(), globals())
+        return img
