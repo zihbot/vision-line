@@ -5,7 +5,7 @@ import yaml
 
 class BaseFunction():
     def __init__(self, path: str) -> None:
-        self.data = yaml.load(open('../functions/' + path + '.yaml'))
+        self.data = yaml.load(open('../functions/' + path + '.yaml'), Loader=yaml.FullLoader)
         self.name = self.data['name']
     
     def run(self, img_loc: np.ndarray) -> np.ndarray:
