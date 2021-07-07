@@ -30,13 +30,14 @@ def create_image_delete(line_id: int, position: int) -> int:
 
 def get_image(line_id: int) -> bytes:
     logger.debug('get_image id=%s data=%s', line_id, lines[line_id])
-    img = cv2.imread('img.jpg')
+    img_loc = cv2.imread('img.jpg')
 
     for node in lines[line_id]:
         func = FunctionFactory.get_function(node['name'])
-        img = func.run(img)
+        func.set_inputs(node['inputs'] if 'inputs' in node else {})
+        img_loc = func.run(img_loc)
     
-    is_success, buffer_array = cv2.imencode('.jpg', img)
+    is_success, buffer_array = cv2.imencode('.jpg', img_loc)
     return buffer_array.tobytes()
 
 def get_line(line_id: int) -> list[dict]:

@@ -1,15 +1,31 @@
+import logging
 from os import name
 import cv2
 import numpy as np
 import yaml
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
 class BaseFunction():
     def __init__(self, path: str) -> None:
         self.data = yaml.load(open('../functions/' + path + '.yaml'), Loader=yaml.FullLoader)
-        self.name = self.data['name']
+        self.name: str = self.data['name']
+        self.valid_inputs: dict[str, dict] = self.data['inputs'] if 'inputs' in self.data else {}
+
+    def set_inputs(self, inputs: dict[str, str]):
+        # TODO: check validity
+        self.inputs = inputs
     
     def run(self, img_loc: np.ndarray) -> np.ndarray:
         global img
         img = img_loc
+
+        # Set inputs for run
+        for name, value in self.inputs.items():
+            logger.debug('Inserting variables: ' + name + '=' + value)
+            globals()[name] = value
+
+        # Run script
         exec(self.data['run'], globals(), globals())
         return img

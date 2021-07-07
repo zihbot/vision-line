@@ -1,8 +1,8 @@
 name: canny
 inputs:
   - threshold1:
-    type: float
+      type: int
   - threshold2:
-    type: float
+      type: int
 run: |2
-  img = cv2.Canny(img, threshold1, threshold2)
+  img = cv2.Canny(img, int(threshold1), int(threshold2))
