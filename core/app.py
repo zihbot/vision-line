@@ -38,8 +38,8 @@ def get_image(line_id: str):
 
 @app.route('/line/<line_id>', methods=['GET'])
 def get_line(line_id: str):
-    return jsonify({'list': controllers.image.get_line(int(line_id))})
+    return jsonify(controllers.image.get_line(int(line_id)))
 
 @app.route('/function/', methods=['GET'])
 def get_functions():
-    return jsonify({'list': FunctionFactory.get_all_function_names()})
+    return jsonify(FunctionFactory.get_all_function_names())

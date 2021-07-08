@@ -4,7 +4,6 @@ import logging
 from function_factory import FunctionFactory
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 lines: list[list[dict]] = []
 
 def post_create_image_bck(data: list[dict]) -> bytes:
