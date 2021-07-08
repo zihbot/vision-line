@@ -13,6 +13,6 @@ node {
   }
 
   stage('Deploy') {
-    sh 'docker run -d --name core:latest -v "functions/":"/functions" -p 80:80 core:latest'
+    sh 'docker run -d --name core:latest -v "functions/":"/functions" -p 80:80 core'
   }
 }
