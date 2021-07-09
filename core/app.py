@@ -3,10 +3,12 @@ import io
 from collections import namedtuple
 from flask.helpers import send_file
 from flask import jsonify
+from flask_cors import CORS
 import controllers.image
 
 from flask import Flask, request
 app = Flask(__name__)
+cors = CORS(app)
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
