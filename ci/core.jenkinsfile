@@ -1,10 +1,10 @@
 pipeline {
   agent any
 
-  checkout scm
   stages {
     stage('Build') {
       steps {
+        checkout scm
         dir('core') {
           sh 'docker build --pull --rm -f "Dockerfile" -t core:latest "."'
         }
