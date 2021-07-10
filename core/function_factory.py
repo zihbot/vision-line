@@ -19,6 +19,17 @@ class FunctionFactory():
         return [f.name for f in cls.all_functions]
 
     @classmethod
+    def get_all_function_inputs(cls) -> list[any]:
+        result = []
+        for funct in cls.all_functions:
+            item = {
+                'name': funct.name,
+                'inputs': funct.valid_inputs
+            }
+            result.append(item)
+        return result
+
+    @classmethod
     def get_function(cls, name: str) -> BaseFunction:
         for function in cls.all_functions:
             if function.name == name:

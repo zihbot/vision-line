@@ -11,7 +11,7 @@ class BaseFunction():
     def __init__(self, path: str) -> None:
         self.data = yaml.load(open('../functions/' + path + '.yaml'), Loader=yaml.FullLoader)
         self.name: str = self.data['name']
-        self.valid_inputs: dict[str, dict] = self.data['inputs'] if 'inputs' in self.data else {}
+        self.valid_inputs: dict[str, dict] = self.data['inputs'] if 'inputs' in self.data else []
 
     def set_inputs(self, inputs: dict[str, str]):
         # TODO: check validity

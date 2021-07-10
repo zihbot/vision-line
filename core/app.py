@@ -9,6 +9,7 @@ import controllers.image
 from flask import Flask, request
 app = Flask(__name__)
 cors = CORS(app)
+app.config['APPLICATION_ROOT'] = '/api/v1'
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -44,4 +45,4 @@ def get_line(line_id: str):
 
 @app.route('/function/', methods=['GET'])
 def get_functions():
-    return jsonify(FunctionFactory.get_all_function_names())
+    return jsonify(FunctionFactory.get_all_function_inputs())
