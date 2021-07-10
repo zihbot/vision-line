@@ -37,7 +37,8 @@ class App extends React.Component<AppProps, AppState> {
             <button className="btn btn-primary" onClick={() => this.addImage()}>Add Image</button>
           </div>
         </div>
-        { this.state.currentImage && <Line currentImage={this.state.currentImage} /> }
+        { (this.state.currentImage || this.state.currentImage === 0) 
+          && <Line currentImage={this.state.currentImage} /> }
       </div>
     );
   }

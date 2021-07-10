@@ -3,7 +3,7 @@ import LineNodes from "./LineNodes";
 
 
 type LineProps = {currentImage: number}
-type LineState = {}
+type LineState = {imageKey?: number}
 
 class Line extends React.Component<LineProps, LineState> {
   constructor(props: any) {
@@ -21,10 +21,10 @@ class Line extends React.Component<LineProps, LineState> {
         </div>
         <div className="row">
           <div className="col-3">
-            <LineNodes currentImage={this.props.currentImage} />
+            <LineNodes currentImage={this.props.currentImage} onChange={() => this.setState({imageKey: Date.now()})} />
           </div>
           <div className="col-9">
-            <img src={"/image/"+this.props.currentImage} alt="Current" width="100%" />
+            <img src={"/image/"+this.props.currentImage+"?key="+this.state.imageKey} alt="Current" width="100%" />
           </div>
         </div>
 			</div>

@@ -1,8 +1,12 @@
+import { LineNodeDef } from '../types/api';
+
 interface Result<T = any> {
   status?: number,
   value?: T,
   error?: string,
 }
+
+type ResponseType = 'text' | 'json' | 'blob';
 
 class DataService {
   static getFunctions() {    
@@ -15,6 +19,16 @@ class DataService {
       .then(data => this.handleResponse(data), error => this.handleError(error));
   }
 
+  static getLineNodes(lineId: number) {    
+    return fetch('/line/' + lineId)
+      .then(data => this.handleResponse(data), error => this.handleError(error));
+  }
+
+  static addNode(lineId: number, position: number, node: LineNodeDef) {    
+    return fetch('/createImage/' + lineId + '/add/' + position, this.postOptions(node))
+      .then(data => this.handleResponse(data, 'text'), error => this.handleError(error));
+  }
+
   // Util functions
   static postOptions(body: any): any {
     return {
@@ -24,7 +38,7 @@ class DataService {
     }
   }
 
-  static handleResponse(data: Response, type: string = 'json'): Promise<Result> {
+  static handleResponse(data: Response, type: ResponseType = 'json'): Promise<Result> {
     const result: Result = {status: data.status};
     if (data.ok) {
       switch (type) {
