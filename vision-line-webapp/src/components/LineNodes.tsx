@@ -1,6 +1,6 @@
 import React from "react";
 import dataService from '../services/data.service';
-import { LineNodeDef } from "../types/api";
+import { LineNodeDef, FunctionDef } from '../types/api';
 
 
 type LineNodesProps = {
@@ -9,8 +9,9 @@ type LineNodesProps = {
 }
 type LineNodesState = {
   nodes: LineNodeDef[],
-  functions: string[],
+  functions: FunctionDef[],
   working: boolean,
+  selectedFunction?: FunctionDef,
 }
 
 class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
@@ -18,14 +19,12 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
     super(props);
     this.state = {nodes: [], functions: [], working: false};
   }
-
-  selectedFunction?: string;
+  inputs: {[id: string]: string} = {}
 
   componentDidMount() {
     dataService.getFunctions().then(data => {
-      const fs: string[] = data.value;
-      this.setState({ functions: fs });
-      if (fs && fs.length>0) this.selectedFunction = fs[0];
+      const fs: FunctionDef[] = data.value;
+      this.setState({ functions: fs, selectedFunction: fs && fs.length>0 ? fs[0] : undefined });
     }, err => {
       console.log('ERROR', err);
     });
@@ -41,12 +40,18 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
   }
 
   addFunction() {
-    if (!this.selectedFunction) {
+    if (!this.state.selectedFunction) {
       console.log('ERROR no selected function');
       return;
     }
     this.setState({ working: true });
-    dataService.addNode(this.props.currentImage, this.state.functions.length, {name: this.selectedFunction}).then(data => {
+    const inputs: {[k: string]: any} = {};
+    this.state.selectedFunction.inputs.forEach(input => {
+      const name = Object.keys(input)[0];
+      inputs[name] = this.inputs[name] ?? '';
+    });
+    dataService.addNode(this.props.currentImage, this.state.functions.length, 
+        {name: this.state.selectedFunction.name, inputs: inputs}).then(data => {
       this.reload();
       this.props.onChange();
       this.setState({ working: false });
@@ -71,7 +76,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
   render() {
 		return (
 			<div>
-        {this.props.currentImage}
+        <h3>Módosítók</h3>
         <ul className="list-group">
           {this.state.nodes.map((node, i) => 
             <li key={i} className="list-group-item">
@@ -80,11 +85,13 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
                 onClick={() => this.deleteNode(i)} style={{float: "right"}}>Törlés</button>
             </li>)}
         </ul>
+        <hr />
+        <h3>Új hozzáadása</h3>
         <div className="input-group mt-2">
           <select id="selectedFunction" className="form-select" 
-            onChange={e => this.selectedFunction = e.target.value}>
-            {this.state.functions.map(func => 
-              <option value={func} style={{width: "auto"}}>{func}</option>
+            onChange={e => this.setState({selectedFunction: this.state.functions[parseInt(e.target.value)]})}>
+            {this.state.functions.map((func, i) => 
+              <option value={i} style={{width: "auto"}}>{func.name}</option>
             )}
           </select>
           <div className="input-group-append">
@@ -92,6 +99,18 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
               disabled={this.state.working} id="addButton">Add</button>
           </div>
         </div>
+        {(this.state.selectedFunction?.inputs?.length ?? 0) > 0 && <form>
+          { this.state.selectedFunction?.inputs.map(input => {
+            const name = Object.keys(input)[0];
+            return <div className="form-group row mt-2">
+              <label htmlFor={name} className="col-form-label col-sm-4">{name}</label>
+              <div className="col-sm-8">
+                <input type="text" className="form-control" id={name}
+                  onChange={e => this.inputs[name] = e.target.value} />
+              </div>
+            </div>
+          })}
+        </form>}
 			</div>
 		);
   }
