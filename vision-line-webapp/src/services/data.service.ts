@@ -10,6 +10,20 @@ export class DataService {
       .then(data => this.handleResponse(data), error => this.handleError(error));
   }
 
+  static createImage() {    
+    return fetch('/createImage', this.postOptions([]))
+      .then(data => this.handleResponse(data), error => this.handleError(error));
+  }
+
+  // Util functions
+  static postOptions(body: any): any {
+    return {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    }
+  }
+
   static handleResponse(data: Response, type: string = 'json'): Promise<Result> {
     const result: Result = {status: data.status};
     if (data.ok) {
