@@ -29,12 +29,23 @@ class DataService {
       .then(data => this.handleResponse(data, 'text'), error => this.handleError(error));
   }
 
+  static deleteNode(lineId: number, position: number) {    
+    return fetch('/createImage/' + lineId + '/delete/' + position, this.deleteOptions())
+      .then(data => this.handleResponse(data, 'text'), error => this.handleError(error));
+  }
+
   // Util functions
   static postOptions(body: any): any {
     return {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
+    }
+  }
+
+  static deleteOptions(): any {
+    return {
+      method: 'DELETE'
     }
   }
 

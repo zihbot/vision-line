@@ -3,12 +3,16 @@ import LineNodes from "./LineNodes";
 
 
 type LineProps = {currentImage: number}
-type LineState = {imageKey?: number}
+type LineState = {imageKey?: number, imageLoaded: boolean}
 
 class Line extends React.Component<LineProps, LineState> {
   constructor(props: any) {
     super(props);
-    this.state = {};
+    this.state = {imageLoaded: false};
+  }
+
+  onNodesChange() {
+    this.setState({imageKey: Date.now(), imageLoaded: false})
   }
 
   render() {
@@ -21,10 +25,15 @@ class Line extends React.Component<LineProps, LineState> {
         </div>
         <div className="row">
           <div className="col-3">
-            <LineNodes currentImage={this.props.currentImage} onChange={() => this.setState({imageKey: Date.now()})} />
+            <LineNodes currentImage={this.props.currentImage} onChange={() => this.onNodesChange()} />
           </div>
           <div className="col-9">
-            <img src={"/image/"+this.props.currentImage+"?key="+this.state.imageKey} alt="Current" width="100%" />
+            {!this.state.imageLoaded &&
+              <p>Loading...</p>}
+            <img src={"/image/"+this.props.currentImage+"?key="+this.state.imageKey} 
+                onLoad={() => this.setState({imageLoaded: true})} 
+                style={this.state.imageLoaded ? {} : {display: 'none'}}
+                alt="Current" width="100%" />
           </div>
         </div>
 			</div>
