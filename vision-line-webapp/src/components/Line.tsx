@@ -24,10 +24,10 @@ class Line extends React.Component<LineProps, LineState> {
           </div>
         </div>
         <div className="row">
-          <div className="col-3">
+          <div className="col-4">
             <LineNodes currentImage={this.props.currentImage} onChange={() => this.onNodesChange()} />
           </div>
-          <div className="col-9">
+          <div className="col-8">
             {!this.state.imageLoaded &&
               <p>Loading...</p>}
             <img src={"/image/"+this.props.currentImage+"?key="+this.state.imageKey} 

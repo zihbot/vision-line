@@ -9,20 +9,30 @@ type LineNodesProps = {
 }
 type LineNodesState = {
   nodes: LineNodeDef[],
+  functions: string[],
   working: boolean,
 }
 
 class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
   constructor(props: any) {
     super(props);
-    this.state = {nodes: [], working: false};
+    this.state = {nodes: [], functions: [], working: false};
   }
+
+  selectedFunction?: string;
 
   componentDidMount() {
-    this.load();
+    dataService.getFunctions().then(data => {
+      const fs: string[] = data.value;
+      this.setState({ functions: fs });
+      if (fs && fs.length>0) this.selectedFunction = fs[0];
+    }, err => {
+      console.log('ERROR', err);
+    });
+    this.reload();
   }
 
-  load() {
+  reload() {
     dataService.getLineNodes(this.props.currentImage).then(data => {
       this.setState({ nodes: data.value });
     }, err => {
@@ -30,10 +40,14 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
     });
   }
 
-  addGreyscale() {
+  addFunction() {
+    if (!this.selectedFunction) {
+      console.log('ERROR no selected function');
+      return;
+    }
     this.setState({ working: true });
-    dataService.addNode(this.props.currentImage, 0, {name: 'greyscale'}).then(data => {
-      this.load();
+    dataService.addNode(this.props.currentImage, this.state.functions.length, {name: this.selectedFunction}).then(data => {
+      this.reload();
       this.props.onChange();
       this.setState({ working: false });
     }, err => {
@@ -45,7 +59,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
   deleteNode(position: number) {
     this.setState({ working: true });
     dataService.deleteNode(this.props.currentImage, position).then(data => {
-      this.load();
+      this.reload();
       this.props.onChange();
       this.setState({ working: false });
     }, err => {
@@ -62,15 +76,22 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
           {this.state.nodes.map((node, i) => 
             <li key={i} className="list-group-item">
               <span>{node.name}</span>
-              <button className="btn btn-danger"
-                disabled={this.state.working}
-                onClick={() => this.deleteNode(i)}
-                style={{float: "right"}}>Törlés</button>
+              <button className="btn btn-danger" disabled={this.state.working}
+                onClick={() => this.deleteNode(i)} style={{float: "right"}}>Törlés</button>
             </li>)}
         </ul>
-        <button className="btn btn-primary" 
-          onClick={() => this.addGreyscale()}
-          disabled={this.state.working}>Add Greyscale</button>
+        <div className="input-group mt-2">
+          <select id="selectedFunction" className="form-select" 
+            onChange={e => this.selectedFunction = e.target.value}>
+            {this.state.functions.map(func => 
+              <option value={func} style={{width: "auto"}}>{func}</option>
+            )}
+          </select>
+          <div className="input-group-append">
+            <button className="btn btn-primary" onClick={() => this.addFunction()} 
+              disabled={this.state.working} id="addButton">Add</button>
+          </div>
+        </div>
 			</div>
 		);
   }
