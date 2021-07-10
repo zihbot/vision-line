@@ -1,0 +1,72 @@
+openapi: '3.0.2'
+info:
+  title: Vision Line API
+  version: '1.0'
+servers:
+  - url: https://localhost:5000/api/v1/
+  
+paths:
+  /createImage:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/lineNodeList'
+      responses:
+        200:
+          description: OK
+  /createImage/{lineId}/add/{position}:
+    post:
+      parameters:
+        - in: path
+          name: lineId
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: position
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/lineNode'
+      responses:
+        200:
+          description: OK
+  /createImage/{lineId}/delete/{position}:
+    delete:
+      parameters:
+        - in: path
+          name: lineId
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: position
+          schema:
+            type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+  
+          
+
+components:
+  schemas:
+    lineNode:
+      type: object
+      properties:
+        name:
+          type: string
+    lineNodeList:
+      type: array
+      items:
+        $ref: "#/components/schemas/lineNode"
+      
