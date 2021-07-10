@@ -1,10 +1,10 @@
-export interface Result<T = any> {
+interface Result<T = any> {
   status?: number,
   value?: T,
   error?: string,
 }
 
-export class DataService {
+class DataService {
   static getFunctions() {    
     return fetch('/function')
       .then(data => this.handleResponse(data), error => this.handleError(error));
@@ -57,3 +57,5 @@ export class DataService {
     return Promise.reject(result);
   }
 }
+
+export default DataService;

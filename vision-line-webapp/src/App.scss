@@ -1,0 +1,11 @@
+@import "./styles/vars";
+@import "~bootstrap/scss/bootstrap";
+
+body {
+  background-color: $baby-powder;
+  padding-top: 1rem;
+}
+
+.container {
+  max-width: 1000px;
+}

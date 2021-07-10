@@ -1,6 +1,7 @@
 import React from 'react';
-import { DataService } from './services/data.service';
+import dataService from './services/data.service';
 import Line from './components/Line';
+import './App.scss';
 
 type AppProps = {}
 type AppState = {currentImage?: number}
@@ -12,7 +13,7 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   handleClick() {
-    DataService.getFunctions().then(data => {
+    dataService.getFunctions().then(data => {
       console.log('DATA', data);
     }, err => {
       console.log('ERROR', err);
@@ -20,7 +21,7 @@ class App extends React.Component<AppProps, AppState> {
   }
 
   addImage() {
-    DataService.createImage().then(data => {
+    dataService.createImage().then(data => {
       console.log('DATA', data);
       this.setState({ currentImage: data.value });
     }, err => {
@@ -30,8 +31,12 @@ class App extends React.Component<AppProps, AppState> {
 
   render() {
     return (
-      <div className="">
-        <button onClick={() => this.addImage()}>Add Image</button>
+      <div className="container page">
+        <div className="row">
+          <div className="col-12">
+            <button className="btn btn-primary" onClick={() => this.addImage()}>Add Image</button>
+          </div>
+        </div>
         { this.state.currentImage && <Line currentImage={this.state.currentImage} /> }
       </div>
     );
