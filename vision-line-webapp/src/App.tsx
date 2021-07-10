@@ -1,10 +1,11 @@
 import React from 'react';
+import { DataService } from './services/data.service';
 
 class App extends React.Component {
   handleClick() {
-    fetch('/function').then(data => data.json().then( data => {
+    DataService.getFunctions().then(data => {
       console.log('DATA', data);
-    })).catch(err => {
+    }, err => {
       console.log('ERROR', err);
     });
   }
