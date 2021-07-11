@@ -1,0 +1,6 @@
+name: threshold
+inputs:
+  - threshold:
+      type: int
+run: |2
+  img = cv2.cvtColor(img, int(threshold), 255, cv2.THRESH_BINARY)

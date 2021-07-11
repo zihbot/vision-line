@@ -65,6 +65,9 @@ components:
       properties:
         name:
           type: string
+        inputs:
+          type: object
+          nullable: true
     lineNodeList:
       type: array
       items:
