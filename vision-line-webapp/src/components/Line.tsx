@@ -1,9 +1,9 @@
 import React from "react";
 import LineNodes from "./LineNodes";
-
+import dataService from '../services/data.service';
 
 type LineProps = {currentImage: number}
-type LineState = {imageKey?: number, imageLoaded: boolean, imageError: boolean}
+type LineState = {imageSrc?: string, imageLoaded: boolean, imageError: boolean}
 
 class Line extends React.Component<LineProps, LineState> {
   constructor(props: any) {
@@ -11,12 +11,21 @@ class Line extends React.Component<LineProps, LineState> {
     this.state = {imageLoaded: false, imageError: false};
   }
 
+  componentDidMount() {
+    this.setImageSrc(Date.now());
+  }
+
   onNodesChange() {
-    this.setState({imageKey: Date.now(), imageLoaded: false, imageError: false})
+    this.setState({imageLoaded: false, imageError: false});
+    this.setImageSrc(Date.now());
   }
 
   onImageError() {
-    this.setState({imageLoaded: true, imageError: true})
+    this.setState({imageLoaded: true, imageError: true});
+  }
+
+  setImageSrc(time: number) {
+    this.setState({imageSrc: dataService.getImageRoute() + this.props.currentImage + "?key=" + this.state.imageSrc});
   }
 
   render() {
@@ -37,7 +46,7 @@ class Line extends React.Component<LineProps, LineState> {
             {this.state.imageError &&
               <div className="alert alert-danger">Error in pipeline</div>}
             {!this.state.imageError && 
-              <img src={"/image/"+this.props.currentImage+"?key="+this.state.imageKey} 
+              <img src={this.state.imageSrc} 
                 onLoad={() => this.setState({imageLoaded: true})} 
                 onError={() => this.onImageError()}
                 style={this.state.imageLoaded ? {} : {display: 'none'}}
