@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Build') {
+      steps {
+        checkout scm
+        dir('vision-line-webapp') {
+          sh 'docker build --pull --rm -f "Dockerfile" -t webapp:latest "."'
+        }
+      }
+    }
+
+    stage('Cleanup') {
+      steps {
+        sh 'docker ps -f name=webapp -q | xargs --no-run-if-empty docker container stop'
+        sh 'docker container ls -a -fname=webapp -q | xargs --no-run-if-empty docker container rm'
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        sh 'docker run -d --name webapp -p 80:80 --network="vision-line" webapp:latest'
+      }
+    }
+  }
+}

@@ -20,7 +20,7 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        sh 'docker run -d --name core -v $(pwd)"/functions":"/functions" -p 80:80 core:latest'
+        sh 'docker run -d --name core -v $(pwd)"/functions":"/functions" -p 8090:80 --network="vision-line" core:latest'
       }
     }
   }
