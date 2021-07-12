@@ -15,6 +15,12 @@ class Line extends React.Component<LineProps, LineState> {
     this.setImageSrc(Date.now());
   }
 
+  componentDidUpdate(prevProps: LineProps) {
+    if (prevProps.currentImage !== this.props.currentImage) {
+      this.onNodesChange();
+    }
+  }
+
   onNodesChange() {
     this.setState({imageLoaded: false, imageError: false});
     this.setImageSrc(Date.now());

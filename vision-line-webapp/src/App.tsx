@@ -2,6 +2,7 @@ import React from 'react';
 import dataService from './services/data.service';
 import Line from './components/Line';
 import './App.scss';
+import ImageSelector from './components/ImageSelector';
 
 type AppProps = {}
 type AppState = {currentImage?: number}
@@ -20,23 +21,10 @@ class App extends React.Component<AppProps, AppState> {
     });
   }
 
-  addImage() {
-    dataService.createImage().then(data => {
-      console.log('DATA', data);
-      this.setState({ currentImage: data.value });
-    }, err => {
-      console.log('ERROR', err);
-    });
-  }
-
   render() {
     return (
       <div className="container page">
-        <div className="row">
-          <div className="col-12">
-            <button className="btn btn-primary" onClick={() => this.addImage()}>Add Image</button>
-          </div>
-        </div>
+        <ImageSelector onImageSelect={i => this.setState({ currentImage: i })} />
         { (this.state.currentImage || this.state.currentImage === 0) 
           && <Line currentImage={this.state.currentImage} /> }
       </div>

@@ -31,6 +31,12 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
     this.reload();
   }
 
+  componentDidUpdate(prevProps: LineNodesProps) {
+    if (prevProps.currentImage !== this.props.currentImage) {
+      this.reload();
+    }
+  }
+
   reload() {
     dataService.getLineNodes(this.props.currentImage).then(data => {
       this.setState({ nodes: data.value });

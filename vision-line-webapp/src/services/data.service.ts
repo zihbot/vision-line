@@ -40,6 +40,11 @@ class DataService {
       .then(data => this.handleResponse(data, 'text'), error => this.handleError(error));
   }
 
+  static getAllLines() {    
+    return fetch(API_ROOT + '/line')
+      .then(data => this.handleResponse(data), error => this.handleError(error));
+  }
+
   // Util functions
   static postOptions(body: any): any {
     return {
