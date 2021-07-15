@@ -50,7 +50,7 @@ class ImageSelector extends React.Component<ImageSelectorProps, ImageSelectorSta
         <ul className="pagination">
           {this.state.lines.reverse().map((val, i) => {
             const n = this.state.lines.length - i;
-            return <li className={["page-item", this.state.current===n-1 ? "active" : ""].join(" ")} >
+            return <li key={n} className={["page-item", this.state.current===n-1 ? "active" : ""].join(" ")} >
               <div className="page-link" onClick={()=>this.selectImage(n-1)}>
               {n}
               {this.state.current !== n-1 && <span> ({val})</span>}

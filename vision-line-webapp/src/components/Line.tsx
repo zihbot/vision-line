@@ -1,6 +1,7 @@
 import React from "react";
 import LineNodes from "./LineNodes";
 import dataService from '../services/data.service';
+import StatusBar from "./StatusBar";
 
 type LineProps = {currentImage: number}
 type LineState = {imageSrc?: string, imageLoaded: boolean, imageError: boolean}
@@ -39,14 +40,14 @@ class Line extends React.Component<LineProps, LineState> {
 			<div>
         <div className="row">
           <div className="col">
-				    Image number: {this.props.currentImage}
+            <StatusBar />
           </div>
         </div>
         <div className="row">
-          <div className="col-4">
+          <div className="col-6">
             <LineNodes currentImage={this.props.currentImage} onChange={() => this.onNodesChange()} />
           </div>
-          <div className="col-8">
+          <div className="col-6">
             {!this.state.imageLoaded &&
               <div className="alert alert-secondary">Loading...</div>}
             {this.state.imageError &&

@@ -97,7 +97,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
           <select id="selectedFunction" className="form-select" 
             onChange={e => this.setState({selectedFunction: this.state.functions[parseInt(e.target.value)]})}>
             {this.state.functions.map((func, i) => 
-              <option value={i} style={{width: "auto"}}>{func.name}</option>
+              <option value={i} key={i} style={{width: "auto"}}>{func.name}</option>
             )}
           </select>
           <div className="input-group-append">
@@ -108,7 +108,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
         {(this.state.selectedFunction?.inputs?.length ?? 0) > 0 && <form>
           { this.state.selectedFunction?.inputs.map(input => {
             const name = Object.keys(input)[0];
-            return <div className="form-group row mt-2">
+            return <div key={name} className="form-group row mt-2">
               <label htmlFor={name} className="col-form-label col-sm-4">{name}</label>
               <div className="col-sm-8">
                 <input type="text" className="form-control" id={name}
