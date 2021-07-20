@@ -32,7 +32,7 @@ class Line extends React.Component<LineProps, LineState> {
   }
 
   setImageSrc(time: number) {
-    this.setState({imageSrc: dataService.getImageRoute() + this.props.currentImage + "?key=" + this.state.imageSrc});
+    this.setState({imageSrc: dataService.getImageRoute() + this.props.currentImage + "?key=" + time});
   }
 
   render() {
