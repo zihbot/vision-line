@@ -63,7 +63,7 @@ def get_line(line_id: str):
 def get_lines_node_numbers():
     return jsonify(controllers.image.get_lines_node_numbers())
 
-@root.route('/function/', methods=['GET'])
+@root.route('/function', methods=['GET'])
 def get_functions():
     return jsonify(FunctionFactory.get_all_function_inputs())
 
