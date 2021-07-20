@@ -1,4 +1,4 @@
-import React from "react";
+import React, { DragEvent } from "react";
 import dataService from '../services/data.service';
 import { LineNodeDef, FunctionDef } from '../types/api';
 
@@ -8,10 +8,11 @@ type LineNodesProps = {
   onChange: () => void,
 }
 type LineNodesState = {
-  nodes: LineNodeDef[],
+  nodes: {data: LineNodeDef, order: number, id: number}[]
   functions: FunctionDef[],
   working: boolean,
   selectedFunction?: FunctionDef,
+  draggedNodeId?: number,
 }
 
 class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
@@ -39,7 +40,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
 
   reload() {
     dataService.getLineNodes(this.props.currentImage).then(data => {
-      this.setState({ nodes: data.value });
+      this.setState({ nodes: data.value.map((n: any, i: number) => ({data: n, order: i, id: i})) });
     }, err => {
       console.log('ERROR', err);
     });
@@ -79,14 +80,55 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
     });
   }
 
+  handleDrop(e: DragEvent<HTMLLIElement>) {
+    const newOrder = this.state.nodes.map(n => n.id);
+    if (newOrder.every((x, i) => x === i)) return;
+    
+    this.setState({ working: true });
+    dataService.createImageReorder(this.props.currentImage, newOrder).then(data => {
+        this.reload();
+        this.props.onChange();
+        this.setState({ working: false });
+      }, err => {
+        // Set order to default
+        this.setState({nodes: this.state.nodes.map(n => {n.order = n.id; return n;}), working: false });
+        console.log('ERROR', err);
+      });
+  }
+
+  handleDragOver(e: DragEvent<HTMLLIElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!e.currentTarget.id.startsWith("VisionNode_")) return;
+    const dropId = parseInt(e.currentTarget.id.split("_")[1]);
+
+    if (dropId === this.state.draggedNodeId) return;
+    const dragOrder = this.state.nodes.find(n => n.id === this.state.draggedNodeId)?.order ?? -1;
+    const dropOrder = this.state.nodes.find(n => n.id === dropId)?.order ?? -1;
+
+    const newNodes = this.state.nodes.map(node => {
+      if (node.id === dropId) node.order = dragOrder;
+      if (node.id === this.state.draggedNodeId) node.order = dropOrder;
+      return node;
+    });
+    this.setState({nodes: newNodes});
+  }
+
   render() {
 		return (
 			<div>
         <h3>Módosítók</h3>
         <ul className="list-group">
-          {this.state.nodes.map((node, i) => 
-            <li key={i} className="list-group-item">
-              <span>{node.name}</span>
+          {this.state.nodes.sort((a, b) => a.order - b.order).map((node, i) => 
+            <li key={i} className={"list-group-item"} id={"VisionNode_"+node.id}
+              style={{}}
+              draggable="true"
+              onDragStart={() => this.setState({draggedNodeId: node.id})}
+              onDragOver={e => this.handleDragOver(e)}
+              onDrop={e => this.handleDrop(e)}>
+
+              <span>{node.data.name}</span>
               <button className="btn btn-danger" disabled={this.state.working}
                 onClick={() => this.deleteNode(i)} style={{float: "right"}}>Törlés</button>
             </li>)}

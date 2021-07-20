@@ -25,6 +25,11 @@ class DataService {
       .then(data => this.handleResponse(data), error => this.handleError(error));
   }
 
+  static createImageReorder(lineId: number, order: number[]) {    
+    return fetch(API_ROOT + '/createImage/' + lineId + '/reorder', this.postOptions(order))
+      .then(data => this.handleResponse(data, 'text'), error => this.handleError(error));
+  }
+
   static getLineNodes(lineId: number) {    
     return fetch(API_ROOT + '/line/' + lineId)
       .then(data => this.handleResponse(data), error => this.handleError(error));
