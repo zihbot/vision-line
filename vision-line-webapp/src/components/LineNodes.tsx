@@ -102,7 +102,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
           </select>
           <div className="input-group-append">
             <button className="btn btn-primary" onClick={() => this.addFunction()} 
-              disabled={this.state.working} id="addButton">Add</button>
+              disabled={this.state.working} id="addButton">Hozzáadás</button>
           </div>
         </div>
         {(this.state.selectedFunction?.inputs?.length ?? 0) > 0 && <form>
