@@ -1,6 +1,7 @@
 import React, { DragEvent } from "react";
 import dataService from '../services/data.service';
 import { LineNodeDef, FunctionDef } from '../types/api';
+import './LineNodes.scss';
 
 
 type LineNodesProps = {
@@ -40,7 +41,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
 
   reload() {
     dataService.getLineNodes(this.props.currentImage).then(data => {
-      this.setState({ nodes: data.value.map((n: any, i: number) => ({data: n, order: i, id: i})) });
+      this.setState({ nodes: data.value.map((n: any, i: number) => ({data: n, order: i, id: i})), draggedNodeId: undefined });
     }, err => {
       console.log('ERROR', err);
     });
@@ -81,8 +82,10 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
   }
 
   handleDrop(e: DragEvent<HTMLLIElement>) {
+    e.preventDefault();
+    e.stopPropagation();
     const newOrder = this.state.nodes.map(n => n.id);
-    if (newOrder.every((x, i) => x === i)) return;
+    if (newOrder.every((x, i) => x === i)) { this.resetOrder(); return; };
     
     this.setState({ working: true });
     dataService.createImageReorder(this.props.currentImage, newOrder).then(data => {
@@ -90,10 +93,14 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
         this.props.onChange();
         this.setState({ working: false });
       }, err => {
-        // Set order to default
-        this.setState({nodes: this.state.nodes.map(n => {n.order = n.id; return n;}), working: false });
+        this.resetOrder();
         console.log('ERROR', err);
       });
+  }
+
+  resetOrder() {
+    // Set order to default
+    this.setState({nodes: this.state.nodes.map(n => {n.order = n.id; return n;}), working: false, draggedNodeId: undefined });
   }
 
   handleDragOver(e: DragEvent<HTMLLIElement>) {
@@ -121,10 +128,12 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
         <h3>Módosítók</h3>
         <ul className="list-group">
           {this.state.nodes.sort((a, b) => a.order - b.order).map((node, i) => 
-            <li key={i} className={"list-group-item"} id={"VisionNode_"+node.id}
+            <li key={i} className={["list-group-item", this.state.draggedNodeId === node.id ? "dragging" : ""].join(' ')} 
+              id={"VisionNode_"+node.id}
               style={{}}
               draggable="true"
               onDragStart={() => this.setState({draggedNodeId: node.id})}
+              onDragEnd={e => {if (e.dataTransfer.dropEffect === 'none') this.resetOrder()}}
               onDragOver={e => this.handleDragOver(e)}
               onDrop={e => this.handleDrop(e)}>
 

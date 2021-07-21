@@ -1,0 +1,6 @@
+@import '../styles/_vars.scss';
+
+li.dragging {
+  outline: 2px solid $sapphire-blue !important;
+  z-index: 1;
+}
