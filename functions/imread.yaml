@@ -1,7 +1,7 @@
 name: imread
 inputs:
   - url:
-    type: string
+      type: string
 run: |2
   imread_filename = 'images/' + hashlib.md5(url.encode()).hexdigest() + '.jpg'
   if not path.exists(imread_filename):
