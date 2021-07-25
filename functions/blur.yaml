@@ -1,0 +1,7 @@
+name: blur
+inputs:
+  - kernel:
+      type: int
+run: |2
+  blur_kernel = ( int(kernel), int(kernel) )
+  img = cv2.filter2D(img, -1, blur_kernel)

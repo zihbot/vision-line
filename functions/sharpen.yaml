@@ -1,0 +1,4 @@
+name: sharpen
+run: |2
+  sharpen_kernel = np.array([[-1,-1,-1], [-1, 9,-1], [-1,-1,-1]])
+  img = cv2.filter2D(img, -1, sharpen_kernel)

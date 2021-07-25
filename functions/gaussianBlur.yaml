@@ -1,0 +1,7 @@
+name: gaussianBlur
+inputs:
+  - kernel:
+      type: int
+run: |2
+  gaussianBlur_kernel = ( int(kernel), int(kernel) )
+  img = cv2.GaussianBlur(img, gaussianBlur_kernel, 0)

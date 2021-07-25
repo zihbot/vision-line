@@ -1,0 +1,3 @@
+name: invert
+run: |2
+  img = cv2.bitwise_not(img)
