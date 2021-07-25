@@ -45,7 +45,7 @@ def get_image(line_id: int, last_node_id: int = None) -> bytes:
     if last_node_id is not None:
         use_nodes = use_nodes[:last_node_id]
 
-    img_loc = cv2.imread('img.jpg')
+    img_loc = cv2.imread('images/_default.jpg')
 
     for node in use_nodes:
         func = FunctionFactory.get_function(node['name'])

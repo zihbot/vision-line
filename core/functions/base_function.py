@@ -1,8 +1,10 @@
 import logging
-from os import name
+from os import name, path
 import cv2
 import numpy as np
 import yaml
+import hashlib
+import requests
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

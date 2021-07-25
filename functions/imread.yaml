@@ -1,0 +1,14 @@
+name: imread
+inputs:
+  - url:
+    type: string
+run: |2
+  imread_filename = 'images/' + hashlib.md5(url.encode()).hexdigest() + '.jpg'
+  if not path.exists(imread_filename):
+    logger.debug('Download image as ' + imread_filename + ' from ' + url)
+    response = requests.get(url)
+    file = open(imread_filename, 'wb')
+    file.write(response.content)
+    file.close()
+    logger.debug('Image downloaded')
+  img = cv2.imread(imread_filename)
