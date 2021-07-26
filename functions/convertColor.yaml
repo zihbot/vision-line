@@ -4,5 +4,5 @@ inputs:
       type: enum
       values: ["COLOR_BGR2GRAY", "COLOR_GRAY2BGR", "COLOR_BGR2HSV", "COLOR_HSV2BGR"]
 run: |2
-  convertColor_colorCode = globals()['cv2.'+code]
+  convertColor_colorCode = locals()['cv2.'+code]
   img = cv2.cvtColor(img, convertColor_colorCode)
