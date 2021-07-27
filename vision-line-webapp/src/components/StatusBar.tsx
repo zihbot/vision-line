@@ -3,7 +3,6 @@ import React from 'react';
 
 class StatusBar extends React.Component<{id: string, setId: ()=>void}, {}> {
   componentDidMount() {
-    this.props.setId();
   }
 
   render() {

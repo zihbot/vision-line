@@ -1,8 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import dataService from '../services/data.service';
 
 type ImageSelectorProps = {
   onImageSelect: (selectedImage: number) => void,
+  id: number,
+  setId: (id: number) => void,
 }
 type ImageSelectorState = {
   lines: number[],
@@ -29,6 +32,7 @@ class ImageSelector extends React.Component<ImageSelectorProps, ImageSelectorSta
 
   selectImage(n: number) {
     this.props.onImageSelect(n);
+    this.props.setId(n);
     this.setState({current: n});
     this.loadImages();
   }
@@ -62,4 +66,5 @@ class ImageSelector extends React.Component<ImageSelectorProps, ImageSelectorSta
   }
 }
 
-export default ImageSelector;
+export default connect((state: any) => {return {id: state.image.id}}, 
+  dispatch => {return {setId: (id: number) => dispatch({type: 'image/setId', id: id})}})(ImageSelector);
