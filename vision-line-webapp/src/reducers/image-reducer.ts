@@ -1,12 +1,18 @@
-type ImageActionType = 'image/setId';
-
-const image = (state = {}, action: {type: ImageActionType, [key: string]: any}) => {
+const image = (state: ImageState = {}, action: {type: string, [key: string]: any}) => {
   switch (action.type) {
-    case 'image/setId':
-      return Object.assign({}, state, {id: action.id, loading: true});
+    case ImageAction.SET_ID:
+      return {...state, id: action.id, loading: true};
     default:
-      return {};
+      return state;
   }
 }
 
 export default image;
+
+export type ImageState = {
+  id?: number
+}
+
+export const ImageAction = {
+  SET_ID: 'image/setId'
+}

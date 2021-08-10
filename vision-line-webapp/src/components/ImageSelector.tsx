@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { RootState } from "../reducers/root-reducer";
 import dataService from '../services/data.service';
 
 type ImageSelectorProps = {
@@ -66,5 +67,5 @@ class ImageSelector extends React.Component<ImageSelectorProps, ImageSelectorSta
   }
 }
 
-export default connect((state: any) => {return {id: state.image.id}}, 
+export default connect((state: RootState) => {return {id: state.image.id}}, 
   dispatch => {return {setId: (id: number) => dispatch({type: 'image/setId', id: id})}})(ImageSelector);

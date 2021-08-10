@@ -2,7 +2,7 @@
   "name": "vision-line-webapp",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://zihbot.ml:35780",
+  "proxy": "http://zihbot.ml:35680",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
