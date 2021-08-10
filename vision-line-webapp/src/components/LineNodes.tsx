@@ -3,6 +3,7 @@ import dataService from '../services/data.service';
 import { LineNodeDef, FunctionDef } from '../types/api';
 import './LineNodes.scss';
 import * as dataservice from '../services/data-service';
+import { Loader } from "./Loader";
 
 
 type LineNodesProps = {
@@ -126,6 +127,7 @@ class LineNodes extends React.Component<LineNodesProps, LineNodesState> {
   render() {
 		return (
 			<div>
+        <Loader></Loader>
         <h3>Módosítók</h3>
         <ul className="list-group">
           {this.state.nodes.sort((a, b) => a.order - b.order).map((node, i) => 

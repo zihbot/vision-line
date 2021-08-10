@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux'
-import image from './image-reducer';
-import { ImageState } from './image-reducer';
+import image, { ImageState } from './image-reducer';
+import line, { LineState } from './line-reducer';
 
 export default combineReducers({
-  image
+  image,
+  line
 })
 
 export type RootState = {
-  image: ImageState
+  image: ImageState,
+  line: LineState,
 }
