@@ -55,7 +55,43 @@ paths:
       responses:
         200:
           description: OK
-  
+
+  /functions:
+    get:
+      description: Get all possible functions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/FunctionsList"
+  /lines:
+    get:
+      description: Get current lines
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LineList"
+    post:
+      description: Create new line
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Line"        
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NodeList"
+
           
 
 components:
@@ -72,4 +108,55 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/lineNode"
+
+    FunctionInput:
+      type: object
+      properties:
+        name:
+          type: string
+        display:
+          type: string
+        type:
+          type: string
+    Function:
+      type: object
+      properties:
+        name: 
+          type: string
+        inputs:
+          type: array
+          items:
+            $ref: "#/components/schemas/FunctionInput"
+      example: {name: 'blur', inputs: [{name: 'kernel', type: 'int'}]}
+    FunctionsList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Function"
+    Node:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the implemented function
+        inputs:
+          type: object
+          description: Input key-value pairs as object
+    NodeList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Node"
+    Line:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        nodes:
+          type: integer
+          description: Count of nodes
+    LineList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Line"
       
