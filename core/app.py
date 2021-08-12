@@ -5,6 +5,7 @@ from flask.helpers import send_file
 from flask import jsonify
 from flask_cors import CORS
 import controllers.image
+from api import models
 
 from flask import Flask, request, Blueprint
 app = Flask(__name__)
@@ -66,5 +67,10 @@ def get_lines_node_numbers():
 @root.route('/function', methods=['GET'])
 def get_functions():
     return jsonify(FunctionFactory.get_all_function_inputs())
+    
+@root.route('/functions', methods=['GET'])
+def get_all_functions():
+    f = models.Function("Funkció")
+    return jsonify(f)
 
 app.register_blueprint(root, url_prefix='/api/v1')
