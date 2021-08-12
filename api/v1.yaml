@@ -65,7 +65,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref:  "#/components/schemas/FunctionsList"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Function"
   /lines:
     get:
       description: Get current lines
@@ -75,7 +77,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LineList"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Line"
     post:
       description: Create new line
       requestBody:
@@ -90,9 +94,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NodeList"
+                type: array
+                items:
+                  $ref: "#/components/schemas/Node"
 
-          
+
 
 components:
   schemas:
@@ -128,10 +134,6 @@ components:
           items:
             $ref: "#/components/schemas/FunctionInput"
       example: {name: 'blur', inputs: [{name: 'kernel', type: 'int'}]}
-    FunctionsList:
-      type: array
-      items:
-        $ref: "#/components/schemas/Function"
     Node:
       type: object
       properties:
@@ -141,10 +143,6 @@ components:
         inputs:
           type: object
           description: Input key-value pairs as object
-    NodeList:
-      type: array
-      items:
-        $ref: "#/components/schemas/Node"
     Line:
       type: object
       properties:
@@ -155,8 +153,7 @@ components:
         nodes:
           type: integer
           description: Count of nodes
-    LineList:
-      type: array
-      items:
-        $ref: "#/components/schemas/Line"
+        lastChange:
+          type: number
+          description: Epoch of last modification
       
