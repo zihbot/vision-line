@@ -70,7 +70,7 @@ def get_functions():
     
 @root.route('/functions', methods=['GET'])
 def get_all_functions():
-    f = models.Function("Funkció")
-    return jsonify(f)
+    f = models.Function("Funkció", inputs=[models.FunctionInput("Be", "Bémenet", "string")])
+    return jsonify([f.to_dict()])
 
 app.register_blueprint(root, url_prefix='/api/v1')

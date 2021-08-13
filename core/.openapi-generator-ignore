@@ -1,0 +1,8 @@
+.*
+/*.*
+/Dockerfile
+*/__main__.py
+*/encoder.py
+**/controllers/
+**/openapi/
+**/test/
