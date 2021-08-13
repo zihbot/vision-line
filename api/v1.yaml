@@ -56,6 +56,8 @@ paths:
         200:
           description: OK
 
+
+
   /functions:
     get:
       description: Get all possible functions
@@ -68,6 +70,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Function"
+
   /lines:
     get:
       description: Get current lines
@@ -80,6 +83,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Line"
+
     post:
       description: Create new line
       requestBody:
@@ -94,9 +98,99 @@ paths:
           content:
             application/json:
               schema:
+                $ref: "#/components/schemas/Line"
+
+  /lines/{lineId}/nodes:
+    parameters:
+      - $ref: '#/components/parameters/lineId'
+
+    get:
+      description: Get nodes for line
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/Node"
+
+    post:
+      description: Add new node with position
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Node"
+        description: The new node
+      responses:
+        '200':
+          description: OK
+          content:            
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Node"
+
+  /lines/{lineId}/nodes/{nodeId}:
+    parameters:
+      - $ref: '#/components/parameters/lineId'
+      - $ref: '#/components/parameters/nodeId'
+
+    put:
+      description: Change the node in nodeId position
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Node"
+        description: The changed node
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Node"
+
+    delete:
+      description: Delete node by nodeId
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Node"
+
+  /images/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/lineId'
+
+    get:
+      description: Get image from line with lineId
+      responses:
+        '200':
+          $ref: '#/components/responses/ImageOkResponse'
+
+  /images/{lineId}/{nodeId}:
+    parameters:
+      - $ref: '#/components/parameters/lineId'
+      - $ref: '#/components/parameters/nodeId'
+
+    get:
+      description: Get image from line with lineId before node with nodeId
+      responses:
+        '200':
+          $ref: '#/components/responses/ImageOkResponse'
 
 
 
@@ -115,6 +209,8 @@ components:
       items:
         $ref: "#/components/schemas/lineNode"
 
+
+
     FunctionInput:
       type: object
       properties:
@@ -124,6 +220,7 @@ components:
           type: string
         type:
           type: string
+
     Function:
       type: object
       properties:
@@ -134,15 +231,23 @@ components:
           items:
             $ref: "#/components/schemas/FunctionInput"
       example: {name: 'blur', inputs: [{name: 'kernel', type: 'int'}]}
+
     Node:
       type: object
       properties:
+        id:
+          type: integer
+          description: ID of Node
         name:
           type: string
           description: Name of the implemented function
+        position:
+          type: integer
+          description: Position of node in line
         inputs:
           type: object
           description: Input key-value pairs as object
+
     Line:
       type: object
       properties:
@@ -156,4 +261,33 @@ components:
         lastChange:
           type: number
           description: Epoch of last modification
-      
+
+
+
+  responses:
+    ImageOkResponse:
+      description: OK Image response
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+
+
+
+  parameters:
+    lineId:
+      name: lineId
+      in: query
+      required: true
+      description: ID of line
+      schema:
+        type: integer
+
+    nodeId:
+      name: nodeId
+      in: query
+      required: true
+      description: ID of node
+      schema:
+        type: integer

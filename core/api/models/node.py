@@ -15,25 +15,35 @@ class Node(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, inputs=None):  # noqa: E501
+    def __init__(self, id=None, name=None, position=None, inputs=None):  # noqa: E501
         """Node - a model defined in OpenAPI
 
+        :param id: The id of this Node.  # noqa: E501
+        :type id: int
         :param name: The name of this Node.  # noqa: E501
         :type name: str
+        :param position: The position of this Node.  # noqa: E501
+        :type position: int
         :param inputs: The inputs of this Node.  # noqa: E501
         :type inputs: object
         """
         self.openapi_types = {
+            'id': int,
             'name': str,
+            'position': int,
             'inputs': object
         }
 
         self.attribute_map = {
+            'id': 'id',
             'name': 'name',
+            'position': 'position',
             'inputs': 'inputs'
         }
 
+        self._id = id
         self._name = name
+        self._position = position
         self._inputs = inputs
 
     @classmethod
@@ -46,6 +56,29 @@ class Node(Model):
         :rtype: Node
         """
         return util.deserialize_model(dikt, cls)
+
+    @property
+    def id(self):
+        """Gets the id of this Node.
+
+        ID of Node  # noqa: E501
+
+        :return: The id of this Node.
+        :rtype: int
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this Node.
+
+        ID of Node  # noqa: E501
+
+        :param id: The id of this Node.
+        :type id: int
+        """
+
+        self._id = id
 
     @property
     def name(self):
@@ -69,6 +102,29 @@ class Node(Model):
         """
 
         self._name = name
+
+    @property
+    def position(self):
+        """Gets the position of this Node.
+
+        Position of node in line  # noqa: E501
+
+        :return: The position of this Node.
+        :rtype: int
+        """
+        return self._position
+
+    @position.setter
+    def position(self, position):
+        """Sets the position of this Node.
+
+        Position of node in line  # noqa: E501
+
+        :param position: The position of this Node.
+        :type position: int
+        """
+
+        self._position = position
 
     @property
     def inputs(self):
