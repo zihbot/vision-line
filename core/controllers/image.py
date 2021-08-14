@@ -1,3 +1,4 @@
+from collections import namedtuple
 import os
 import cv2
 from flask import stream_with_context, request
@@ -8,11 +9,8 @@ import time
 
 logger = logging.getLogger(__name__)
 
-class _Line:
-    name: str
-    last_change: int
-    nodes: list[dict]
-lines: list[_Line] = []
+_Line=namedtuple('_Line', 'name last_change nodes')
+lines: list[_Line] = [_Line(name='asd', last_change=1413534, nodes=[])]
 
 def post_create_image_bck(data: list[dict]) -> bytes:
     img = cv2.imread('img.jpg')
@@ -22,8 +20,7 @@ def post_create_image_bck(data: list[dict]) -> bytes:
     
 def post_create_image(data: list[dict]) -> int:
     logger.debug('post_create_image data=%s', data)
-    l = _Line()
-    l.nodes = data
+    l = _Line(name='xxx', last_change=0, nodes=data)
     lines.append(l)
     return len(lines) - 1
     
@@ -88,9 +85,42 @@ def add_line(line: models.Line) -> models.Line:
     line.nodes = 0 if line.nodes is None else line.nodes
     line.name = '' if line.name is None else line.name
 
-    l = _Line()
-    l.last_change = line.last_change
-    l.name = line.name
-    l.nodes = []
+    l = _Line(line.name, line.last_change, [])
     lines.append(l)
     return line
+
+def nodes_to_model(line_id: int) -> list[models.Node]:
+    result: list[models.Node] = []
+    for i, node in enumerate(lines[line_id].nodes):
+        result.append(models.Node(
+            id=i,
+            position=i,
+            name=node['name'],
+            inputs=node['inputs']
+        ))
+    return result
+
+def add_node(line_id: int, node: models.Node) -> None:
+    l = lines[line_id]
+    l._replace(last_change=time.time_ns())
+    nodes = l.nodes
+    n = {'name': node.name, 'inputs': node.inputs}
+    nodes.insert(node.position, n)
+    l._replace(nodes=nodes)
+    lines[line_id] = l
+
+def put_node(line_id: int, node_id: int, node: models.Node) -> None:
+    l = lines[line_id]
+    l._replace(last_change=time.time_ns())
+    nodes = l.nodes
+    nodes[node_id] = {'name': node.name, 'inputs': node.inputs}
+    l._replace(nodes=nodes)
+    lines[line_id] = l
+
+def delete_node(line_id: int, node_id: int) -> None:
+    l = lines[line_id]
+    l._replace(last_change=time.time_ns())
+    nodes = l.nodes
+    nodes.pop(node_id)
+    l._replace(nodes=nodes)
+    lines[line_id] = l
