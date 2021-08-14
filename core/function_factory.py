@@ -1,3 +1,4 @@
+from api import models
 import os
 from typing import ClassVar
 from functions import *
@@ -26,6 +27,28 @@ class FunctionFactory():
                 'name': funct.name,
                 'inputs': funct.valid_inputs
             }
+            result.append(item)
+        return result
+
+    @classmethod
+    def to_list(cls) -> list[models.Function]:
+        result: list[models.Function] = []
+        for funct in cls.all_functions:
+
+            inputs: list[models.FunctionInput] = []
+            for input in funct.valid_inputs:
+                iname, ival = input.popitem()
+                inputs.append(models.FunctionInput(
+                    name=iname,
+                    display=iname,
+                    type=ival['type']
+                ))
+
+            item = models.Function(
+                name=funct.name,
+                display=funct.name,
+                inputs=inputs
+            )
             result.append(item)
         return result
 

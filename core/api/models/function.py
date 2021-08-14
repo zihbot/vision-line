@@ -17,25 +17,30 @@ class Function(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, inputs=None):  # noqa: E501
+    def __init__(self, name=None, display=None, inputs=None):  # noqa: E501
         """Function - a model defined in OpenAPI
 
         :param name: The name of this Function.  # noqa: E501
         :type name: str
+        :param display: The display of this Function.  # noqa: E501
+        :type display: str
         :param inputs: The inputs of this Function.  # noqa: E501
         :type inputs: List[FunctionInput]
         """
         self.openapi_types = {
             'name': str,
+            'display': str,
             'inputs': List[FunctionInput]
         }
 
         self.attribute_map = {
             'name': 'name',
+            'display': 'display',
             'inputs': 'inputs'
         }
 
         self._name = name
+        self._display = display
         self._inputs = inputs
 
     @classmethod
@@ -69,6 +74,27 @@ class Function(Model):
         """
 
         self._name = name
+
+    @property
+    def display(self):
+        """Gets the display of this Function.
+
+
+        :return: The display of this Function.
+        :rtype: str
+        """
+        return self._display
+
+    @display.setter
+    def display(self, display):
+        """Sets the display of this Function.
+
+
+        :param display: The display of this Function.
+        :type display: str
+        """
+
+        self._display = display
 
     @property
     def inputs(self):

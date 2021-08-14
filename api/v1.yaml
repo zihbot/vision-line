@@ -6,58 +6,6 @@ servers:
   - url: http://localhost:5000/api/v1/
   
 paths:
-  /createImage:
-    post:
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/lineNodeList'
-      responses:
-        200:
-          description: OK
-  /createImage/{lineId}/add/{position}:
-    post:
-      parameters:
-        - in: path
-          name: lineId
-          schema:
-            type: integer
-          required: true
-        - in: path
-          name: position
-          schema:
-            type: integer
-          required: true
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/lineNode'
-      responses:
-        200:
-          description: OK
-  /createImage/{lineId}/delete/{position}:
-    delete:
-      parameters:
-        - in: path
-          name: lineId
-          schema:
-            type: integer
-          required: true
-        - in: path
-          name: position
-          schema:
-            type: integer
-          required: true
-      responses:
-        200:
-          description: OK
-
-
-
   /functions:
     get:
       description: Get all possible functions
@@ -196,21 +144,6 @@ paths:
 
 components:
   schemas:
-    lineNode:
-      type: object
-      properties:
-        name:
-          type: string
-        inputs:
-          type: object
-          nullable: true
-    lineNodeList:
-      type: array
-      items:
-        $ref: "#/components/schemas/lineNode"
-
-
-
     FunctionInput:
       type: object
       properties:
@@ -225,6 +158,8 @@ components:
       type: object
       properties:
         name: 
+          type: string
+        display:
           type: string
         inputs:
           type: array

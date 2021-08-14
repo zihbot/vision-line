@@ -6,5 +6,4 @@ from __future__ import absolute_import
 from api.models.function import Function
 from api.models.function_input import FunctionInput
 from api.models.line import Line
-from api.models.line_node import LineNode
 from api.models.node import Node
