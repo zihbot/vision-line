@@ -1,10 +1,18 @@
+import os
 import cv2
 from flask import stream_with_context, request
 import logging
 from function_factory import FunctionFactory
+from api import models
+import time
 
 logger = logging.getLogger(__name__)
-lines: list[list[dict]] = []
+
+class _Line:
+    name: str
+    last_change: int
+    nodes: list[dict]
+lines: list[_Line] = []
 
 def post_create_image_bck(data: list[dict]) -> bytes:
     img = cv2.imread('img.jpg')
@@ -14,34 +22,36 @@ def post_create_image_bck(data: list[dict]) -> bytes:
     
 def post_create_image(data: list[dict]) -> int:
     logger.debug('post_create_image data=%s', data)
-    lines.append(data)
+    l = _Line()
+    l.nodes = data
+    lines.append(l)
     return len(lines) - 1
     
 def create_image_add(line_id: int, position: int, data: dict) -> int:
     logger.debug('patch_create_image data=%s', data)
-    lines[line_id].insert(position, data)
+    lines[line_id].nodes.insert(position, data)
     return True
     
 def create_image_edit(line_id: int, position: int, data: dict) -> int:
     logger.debug('create_image_edit data=%s', data)
-    lines[line_id][position] = data
+    lines[line_id].nodes[position] = data
     return True
     
 def create_image_reorder(line_id: int, data: list[int]) -> int:
     logger.debug('create_image_reorder data=%s', data)
     if len(data) != len(lines[line_id]):
         return False
-    lines[line_id] = [lines[line_id][i] for i in data]
+    lines[line_id].nodes = [lines[line_id][i] for i in data]
     return True
     
 def create_image_delete(line_id: int, position: int) -> int:
     logger.debug('patch_create_image line_id=%s, position=%s', line_id, position)
-    lines[line_id].pop(position)
+    lines[line_id].nodes.pop(position)
     return True
 
 def get_image(line_id: int, last_node_id: int = None) -> bytes:
     logger.debug('get_image id=%s last_node=%s data=%s', line_id, last_node_id, lines[line_id])
-    use_nodes = lines[line_id]
+    use_nodes = lines[line_id].nodes
     if last_node_id is not None:
         use_nodes = use_nodes[:last_node_id]
 
@@ -56,7 +66,31 @@ def get_image(line_id: int, last_node_id: int = None) -> bytes:
     return buffer_array.tobytes()
 
 def get_line(line_id: int) -> list[dict]:
-    return lines[line_id]
+    return lines[line_id].nodes
 
 def get_lines_node_numbers() -> list[dict]:
-    return [len(line) for line in lines]
+    return [len(line.nodes) for line in lines]
+
+def lines_to_model() -> list[models.Line]:
+    result: list[models.Line] = []
+    for i, line in enumerate(lines):
+        result.append(models.Line(
+            id=i,
+            name=str(i)+'. kép',
+            nodes=len(line.nodes),
+            last_change=line.last_change
+        ))
+    return result
+
+def add_line(line: models.Line) -> models.Line:
+    line.id = len(lines)
+    line.last_change = time.time_ns()
+    line.nodes = 0 if line.nodes is None else line.nodes
+    line.name = '' if line.name is None else line.name
+
+    l = _Line()
+    l.last_change = line.last_change
+    l.name = line.name
+    l.nodes = []
+    lines.append(l)
+    return line

@@ -213,7 +213,7 @@ components:
   parameters:
     lineId:
       name: lineId
-      in: query
+      in: path
       required: true
       description: ID of line
       schema:
@@ -221,7 +221,7 @@ components:
 
     nodeId:
       name: nodeId
-      in: query
+      in: path
       required: true
       description: ID of node
       schema:

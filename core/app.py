@@ -5,6 +5,8 @@ from flask.helpers import send_file
 from flask import jsonify
 from flask_cors import CORS
 import controllers.image
+from controllers.images import images_blueprint
+from controllers.lines import lines_blueprint
 from api import models
 
 from flask import Flask, request, Blueprint
@@ -72,4 +74,6 @@ def get_functions():
 def get_all_functions():
     return jsonify([f.to_dict() for f in FunctionFactory.to_list()])
 
+app.register_blueprint(images_blueprint, url_prefix='/api/v1/images')
+app.register_blueprint(lines_blueprint, url_prefix='/api/v1/lines')
 app.register_blueprint(root, url_prefix='/api/v1')
