@@ -2,7 +2,6 @@ import React, { DragEvent } from "react";
 import dataService from '../services/data.service';
 import { LineNodeDef, FunctionDef } from '../types/api';
 import './LineNodes.scss';
-import * as dataservice from '../services/data-service';
 import { Loader } from "./Loader";
 
 

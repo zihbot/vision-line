@@ -1,9 +1,19 @@
+import { Configuration } from '../api';
+import { DefaultApi } from '../api/apis/DefaultApi';
 declare global {
   interface Window {
     configuraion: {vl_base_url: string}
   }
 }
+
 const API_ROOT = window.configuraion.vl_base_url;
+let API = new DefaultApi(new Configuration({
+  basePath: API_ROOT,
+}));
+
+export default function api() {
+  return API;
+}
 
 export function getLineNodes(lineId: number) {    
   return fetch(API_ROOT + '/line/' + lineId)
