@@ -15,7 +15,7 @@ class Line(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id=None, name=None, nodes=None, last_change=None):  # noqa: E501
+    def __init__(self, id:int = None, name:str = None, nodes:int = None, last_change:int = None):  # noqa: E501
         """Line - a model defined in OpenAPI
 
         :param id: The id of this Line.  # noqa: E501
@@ -25,13 +25,13 @@ class Line(Model):
         :param nodes: The nodes of this Line.  # noqa: E501
         :type nodes: int
         :param last_change: The last_change of this Line.  # noqa: E501
-        :type last_change: float
+        :type last_change: int
         """
         self.openapi_types = {
             'id': int,
             'name': str,
             'nodes': int,
-            'last_change': float
+            'last_change': int
         }
 
         self.attribute_map = {
@@ -129,7 +129,7 @@ class Line(Model):
         Epoch of last modification  # noqa: E501
 
         :return: The last_change of this Line.
-        :rtype: float
+        :rtype: int
         """
         return self._last_change
 
@@ -140,7 +140,7 @@ class Line(Model):
         Epoch of last modification  # noqa: E501
 
         :param last_change: The last_change of this Line.
-        :type last_change: float
+        :type last_change: int
         """
 
         self._last_change = last_change

@@ -194,7 +194,7 @@ components:
           type: integer
           description: Count of nodes
         lastChange:
-          type: number
+          type: integer
           description: Epoch of last modification
 
 

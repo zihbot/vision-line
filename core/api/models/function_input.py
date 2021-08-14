@@ -15,7 +15,7 @@ class FunctionInput(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, display=None, type=None):  # noqa: E501
+    def __init__(self, name:str = None, display:str = None, type:str = None):  # noqa: E501
         """FunctionInput - a model defined in OpenAPI
 
         :param name: The name of this FunctionInput.  # noqa: E501

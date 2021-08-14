@@ -15,7 +15,7 @@ class Node(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id=None, name=None, position=None, inputs=None):  # noqa: E501
+    def __init__(self, id:int = None, name:str = None, position:int = None, inputs:object = None):  # noqa: E501
         """Node - a model defined in OpenAPI
 
         :param id: The id of this Node.  # noqa: E501

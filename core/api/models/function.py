@@ -17,7 +17,7 @@ class Function(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, display=None, inputs=None):  # noqa: E501
+    def __init__(self, name:str = None, display:str = None, inputs:List[FunctionInput] = None):  # noqa: E501
         """Function - a model defined in OpenAPI
 
         :param name: The name of this Function.  # noqa: E501
