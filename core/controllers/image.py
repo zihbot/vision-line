@@ -73,7 +73,7 @@ def lines_to_model() -> list[models.Line]:
     for i, line in enumerate(lines):
         result.append(models.Line(
             id=i,
-            name=str(i)+'. kép',
+            name=line.name,
             nodes=len(line.nodes),
             last_change=line.last_change
         ))
