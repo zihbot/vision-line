@@ -79,9 +79,12 @@ def lines_to_model() -> list[models.Line]:
         ))
     return result
 
+def time_ms() -> int:
+    return time.time_ns() // (1000*1000)
+
 def add_line(line: models.Line) -> models.Line:
     line.id = len(lines)
-    line.last_change = time.time_ns()
+    line.last_change = time_ms()
     line.nodes = 0 if line.nodes is None else line.nodes
     line.name = '' if line.name is None else line.name
 
@@ -102,7 +105,7 @@ def nodes_to_model(line_id: int) -> list[models.Node]:
 
 def add_node(line_id: int, node: models.Node) -> None:
     l = lines[line_id]
-    l._replace(last_change=time.time_ns())
+    l._replace(last_change=time_ms())
     nodes = l.nodes
     n = {'name': node.name, 'inputs': node.inputs}
     nodes.insert(node.position, n)
@@ -111,7 +114,7 @@ def add_node(line_id: int, node: models.Node) -> None:
 
 def put_node(line_id: int, node_id: int, node: models.Node) -> None:
     l = lines[line_id]
-    l._replace(last_change=time.time_ns())
+    l._replace(last_change=time_ms())
     nodes = l.nodes
     nodes[node_id] = {'name': node.name, 'inputs': node.inputs}
     l._replace(nodes=nodes)
@@ -119,7 +122,7 @@ def put_node(line_id: int, node_id: int, node: models.Node) -> None:
 
 def delete_node(line_id: int, node_id: int) -> None:
     l = lines[line_id]
-    l._replace(last_change=time.time_ns())
+    l._replace(last_change=time_ms())
     nodes = l.nodes
     nodes.pop(node_id)
     l._replace(nodes=nodes)
