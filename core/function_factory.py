@@ -37,7 +37,7 @@ class FunctionFactory():
 
             inputs: list[models.FunctionInput] = []
             for input in funct.valid_inputs:
-                iname, ival = input.popitem()
+                iname, ival = next(iter(input.items()))
                 inputs.append(models.FunctionInput(
                     name=iname,
                     display=iname,

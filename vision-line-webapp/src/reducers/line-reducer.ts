@@ -1,3 +1,5 @@
+import { Node } from "../api";
+
 const line = (state: LineState = {}, action: {type: string, [key: string]: any}) => {
   switch (action.type) {
     case LineAction.SET_ALL_NODES:
@@ -11,7 +13,7 @@ export default line;
 
 export type LineState = {
   loading?: boolean,
-  nodes?: any,
+  nodes?: {[key: number]: Node},
 }
 
 export const LineAction = {
