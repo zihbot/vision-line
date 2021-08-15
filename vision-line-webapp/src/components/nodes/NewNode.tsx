@@ -41,6 +41,11 @@ export function NewNode(props: {[x:string]: any}) {
     setParameters(p);
   }
 
+  function openDialog() {
+    setParameters({});
+    setDialogOpen(true);
+  }
+
   const params = functions.all.find(f => f.name === functions.selected)?.inputs?.map((input, i) => (
     <TextField id={input.name + "Param"} label={input.display} required autoFocus={i===0}
           value={parameters[input.name??'']} key={input.name}
@@ -49,7 +54,7 @@ export function NewNode(props: {[x:string]: any}) {
 
   return (
     <>
-    <Button onClick={() => setDialogOpen(true)} variant="contained" color="primary" {...props}>Új</Button>
+    <Button onClick={() => openDialog()} variant="contained" color="primary" {...props}>Új</Button>
     <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
       <DialogTitle>Új módosító</DialogTitle>
 

@@ -12,7 +12,7 @@
  */
 
 import { Observable } from 'rxjs';
-import { BaseAPI, HttpHeaders, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
+import { BaseAPI, HttpHeaders, HttpQuery, throwIfNullOrUndefined, encodeURI, OperationOpts, RawAjaxResponse } from '../runtime';
 import {
     Function,
     Line,
@@ -21,11 +21,13 @@ import {
 
 export interface ImagesLineIdGetRequest {
     lineId: number;
+    lastChange?: number;
 }
 
 export interface ImagesLineIdNodeIdGetRequest {
     lineId: number;
     nodeId: number;
+    lastChange?: number;
 }
 
 export interface LinesLineIdNodesGetRequest {
@@ -72,14 +74,19 @@ export class DefaultApi extends BaseAPI {
     /**
      * Get image from line with lineId
      */
-    imagesLineIdGet({ lineId }: ImagesLineIdGetRequest): Observable<Blob>
-    imagesLineIdGet({ lineId }: ImagesLineIdGetRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Blob>>
-    imagesLineIdGet({ lineId }: ImagesLineIdGetRequest, opts?: OperationOpts): Observable<Blob | RawAjaxResponse<Blob>> {
+    imagesLineIdGet({ lineId, lastChange }: ImagesLineIdGetRequest): Observable<Blob>
+    imagesLineIdGet({ lineId, lastChange }: ImagesLineIdGetRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Blob>>
+    imagesLineIdGet({ lineId, lastChange }: ImagesLineIdGetRequest, opts?: OperationOpts): Observable<Blob | RawAjaxResponse<Blob>> {
         throwIfNullOrUndefined(lineId, 'lineId', 'imagesLineIdGet');
+
+        const query: HttpQuery = {};
+
+        if (lastChange != null) { query['lastChange'] = lastChange; }
 
         return this.request<Blob>({
             url: '/images/{lineId}'.replace('{lineId}', encodeURI(lineId)),
             method: 'GET',
+            query,
             responseType: 'blob',
         }, opts?.responseOpts);
     };
@@ -87,15 +94,20 @@ export class DefaultApi extends BaseAPI {
     /**
      * Get image from line with lineId before node with nodeId
      */
-    imagesLineIdNodeIdGet({ lineId, nodeId }: ImagesLineIdNodeIdGetRequest): Observable<Blob>
-    imagesLineIdNodeIdGet({ lineId, nodeId }: ImagesLineIdNodeIdGetRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Blob>>
-    imagesLineIdNodeIdGet({ lineId, nodeId }: ImagesLineIdNodeIdGetRequest, opts?: OperationOpts): Observable<Blob | RawAjaxResponse<Blob>> {
+    imagesLineIdNodeIdGet({ lineId, nodeId, lastChange }: ImagesLineIdNodeIdGetRequest): Observable<Blob>
+    imagesLineIdNodeIdGet({ lineId, nodeId, lastChange }: ImagesLineIdNodeIdGetRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Blob>>
+    imagesLineIdNodeIdGet({ lineId, nodeId, lastChange }: ImagesLineIdNodeIdGetRequest, opts?: OperationOpts): Observable<Blob | RawAjaxResponse<Blob>> {
         throwIfNullOrUndefined(lineId, 'lineId', 'imagesLineIdNodeIdGet');
         throwIfNullOrUndefined(nodeId, 'nodeId', 'imagesLineIdNodeIdGet');
+
+        const query: HttpQuery = {};
+
+        if (lastChange != null) { query['lastChange'] = lastChange; }
 
         return this.request<Blob>({
             url: '/images/{lineId}/{nodeId}'.replace('{lineId}', encodeURI(lineId)).replace('{nodeId}', encodeURI(nodeId)),
             method: 'GET',
+            query,
             responseType: 'blob',
         }, opts?.responseOpts);
     };

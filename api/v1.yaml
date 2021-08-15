@@ -122,6 +122,7 @@ paths:
   /images/{lineId}:
     parameters:
       - $ref: '#/components/parameters/lineId'
+      - $ref: '#/components/parameters/lastChange'
 
     get:
       description: Get image from line with lineId
@@ -133,6 +134,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/lineId'
       - $ref: '#/components/parameters/nodeId'
+      - $ref: '#/components/parameters/lastChange'
 
     get:
       description: Get image from line with lineId before node with nodeId
@@ -224,5 +226,13 @@ components:
       in: path
       required: true
       description: ID of node
+      schema:
+        type: integer
+
+    lastChange:
+      name: lastChange
+      in: query
+      required: false
+      description: Change time of image
       schema:
         type: integer

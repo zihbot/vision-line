@@ -1,11 +1,10 @@
 import React from 'react';
 import dataService from './services/data.service';
-import Line from './components/Line';
 import './App.scss';
-import ImageSelector from './components/ImageSelector';
-import { Container } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import { Header } from './components/Header';
 import { NodesContainer } from './components/nodes/NodesContainer';
+import { ImageDisplay } from './components/ImageDisplay';
 
 type AppProps = {}
 type AppState = {currentImage?: number}
@@ -29,15 +28,20 @@ class App extends React.Component<AppProps, AppState> {
       <>
         <Container>
           <Header />
-          <NodesContainer />
+          <Grid container spacing={3}>
+            <Grid item xs={6}><NodesContainer /></Grid>
+            <Grid item xs={6}><ImageDisplay /></Grid>
+          </Grid>
         </Container>
-        <div className="container page">
-          <ImageSelector onImageSelect={i => this.setState({ currentImage: i })} />
-          { (this.state.currentImage || this.state.currentImage === 0) 
-            && <Line currentImage={this.state.currentImage} /> }
-        </div>
       </>
     );
+    /*    
+      <div className="container page">
+        <ImageSelector onImageSelect={i => this.setState({ currentImage: i })} />
+        { (this.state.currentImage || this.state.currentImage === 0) 
+          && <Line currentImage={this.state.currentImage} /> }
+      </div>
+    */
   }
 }
 
