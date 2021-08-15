@@ -1,12 +1,19 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, Select, TextField } from '@material-ui/core';
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Function } from '../../api/models/Function';
 import api from '../../services/data-service';
+import { createNodeOnLine } from '../../actions/line-actions';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../reducers/root-reducer';
+import { Node } from '../../api/models/Node';
 
 export function NewNode(props: {[x:string]: any}) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [functions, setFunctions] = useState<{selected: string, all: Function[]}>({selected: '', all: []});
+  const [parameters, setParameters] = useState<any>({});
+  const lineId = useSelector((state: RootState) => state.image.activeId??0);
+  const lineLength = useSelector((state: RootState) => Object.keys(state.line.nodes??0).length);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (functions.all.length === 0) {
@@ -19,9 +26,26 @@ export function NewNode(props: {[x:string]: any}) {
   }, [functions.all]);
   
   function handleCreate() {
-    //dispatch(createNewImage(name));
+    const node: Node = {
+      name: functions.selected,
+      position: lineLength,
+      inputs: parameters
+    }
+    dispatch(createNodeOnLine(lineId, node));
     setDialogOpen(false);
   }
+
+  function handleInputChange(name: string, value: any) {
+    const p = {...parameters};
+    p[name] = value;
+    setParameters(p);
+  }
+
+  const params = functions.all.find(f => f.name === functions.selected)?.inputs?.map((input, i) => (
+    <TextField id={input.name + "Param"} label={input.display} required autoFocus={i===0}
+          value={parameters[input.name??'']} key={input.name}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(input.name??'', e.target.value)}/>
+  )) ?? <></>;
 
   return (
     <>
@@ -29,16 +53,19 @@ export function NewNode(props: {[x:string]: any}) {
     <Dialog onClose={() => setDialogOpen(false)} open={dialogOpen}>
       <DialogTitle>Új módosító</DialogTitle>
 
-      <DialogContent>     
+      <DialogContent>
+        <div style={{display: 'flex', gap: '1rem', flexDirection: 'column', width: '400px', maxWidth: '90%'}}>
         <FormControl>
           <InputLabel htmlFor="function">Function</InputLabel>
-          <Select native id="function" name="function"
+          <Select id="function" name="function"
               value={functions.selected} onChange={(e: any) => setFunctions({ ...functions, selected: e.target.value,})}>
             {functions.all.map(f => (
-              <option value={f.name}>{f.display ?? f.name}</option>
+              <MenuItem key={f.name} value={f.name}>{f.display ?? f.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
+        {params}
+        </div>
       </DialogContent>
 
       <DialogActions>        

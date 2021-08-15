@@ -16,17 +16,21 @@ export function NodesContainer() {
     }
   }, [activeImage, dispatch]);
 
+  const show = typeof activeImage !== 'undefined';
   return (
     <>
-      <div style={{display: 'flex'}}>
-        <Typography variant="h4">Módosítók</Typography>
-        <NewNode style={{marginLeft: 'auto'}}/>
-      </div>
-      <List>
-        {Object.entries(nodes).map(([nodeId, node]) => (
-          <NodeItem key={nodeId} node={node} />
-        ))}
-      </List>
+      {show &&
+      <>
+        <div style={{display: 'flex'}}>
+          <Typography variant="h4">Módosítók</Typography>
+          <NewNode style={{marginLeft: 'auto'}}/>
+        </div>
+        <List>
+          {Object.entries(nodes).map(([nodeId, node]) => (
+            <NodeItem key={nodeId} node={node} />
+          ))}
+        </List>
+      </>}
     </>
   );
 }
