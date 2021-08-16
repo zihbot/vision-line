@@ -5,6 +5,8 @@ import { loadLine } from '../../actions/line-actions';
 import { Typography, List } from '@material-ui/core';
 import { NodeItem } from './NodeItem';
 import { NewNode } from './NewNode';
+import { DraggableList } from '../draggable-list/DraggableList';
+
 export function NodesContainer() {
   const activeImage = useSelector((state: RootState) => state.image.activeId);
   const nodes = useSelector((state: RootState) => state.line.nodes ?? {});
@@ -26,9 +28,11 @@ export function NodesContainer() {
           <NewNode style={{marginLeft: 'auto'}}/>
         </div>
         <List>
-          {Object.entries(nodes).map(([nodeId, node]) => (
-            <NodeItem key={nodeId} node={node} />
-          ))}
+          <DraggableList>
+            {Object.entries(nodes).map(([nodeId, node]) => (
+              <NodeItem key={nodeId} node={node} />
+            ))}
+          </DraggableList>
         </List>
       </>}
     </>

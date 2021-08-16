@@ -3,7 +3,7 @@ import api from '../services/data-service';
 import { useSelector } from 'react-redux';
 import { RootState } from '../reducers/root-reducer';
 import { CircularProgress } from '@material-ui/core';
-import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import MuiAlert from '@material-ui/lab/Alert';
 
 export function ImageDisplay() {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
