@@ -1,21 +1,38 @@
 import { DraggableListItem } from "./DraggableListItem";
-import { createRef, RefObject, useState } from 'react';
+import { createRef, RefObject, useState, useEffect } from 'react';
 import { useRef } from "react";
 
 export function DraggableList(props: {children: JSX.Element[]}) {
-  const items = useRef<RefObject<HTMLDivElement>[]>([]);
-  if (items.current.length !== props.children.length) {
-    items.current = Array(props.children.length).map((_, i) => items.current[i] || createRef());
+  const [positions, setPositions] = useState(props.children.map((_, i) => i));
+  const [movement, setMovement] = useState<{top: number, bottom: number, pos: number}|undefined>();
+
+  function handleMove(top?: number, bottom?: number, pos?: number) {
+    if (!top || !bottom || typeof pos === 'undefined') {
+      // No dragging
+      setPositions(props.children.map((_, i) => i));
+      setMovement(undefined);
+      return;
+    }
+    setMovement({top: top, bottom: bottom, pos: pos});
   }
 
-  function handleMove(x: number, i: number) {
-    
+  function handleSwitch(pos: number) {
+    if (!movement) return;
+    setPositions(positions.map(x => {
+      if (x === pos) return movement.pos;
+      if (x === movement.pos) return pos;
+      return x;
+    }));    
   }
 
   return (
     <>
       {props.children.map((child, i) => (
-        <DraggableListItem ref={items.current[i]} key={i} onMoved={x => handleMove(x, i)}>{child}</DraggableListItem>
+        <DraggableListItem key={i} position={positions[i]} movement={movement}
+          onMoved={(top, bottom) => handleMove(top, bottom, positions[i])}
+          onSwithced={() => handleSwitch(positions[i])}>
+            {child}
+        </DraggableListItem>
       ))}
     </>
   );
