@@ -1,11 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../reducers/root-reducer';
+import { List } from '@material-ui/core';
 import { useEffect } from 'react';
-import { loadLine } from '../../actions/line-actions';
-import { Typography, List } from '@material-ui/core';
+import { DragDropContext, Droppable, DropResult, ResponderProvided } from 'react-beautiful-dnd';
+import { RootState } from '../../reducers/root-reducer';
+import { loadLine, moveNodeInList } from '../../actions/line-actions';
 import { NodeItem } from './NodeItem';
-import { NewNode } from './NewNode';
-import { DraggableList } from '../draggable-list/DraggableList';
+import { ContainerHeader } from './ContainerHeader';
 
 export function NodesContainer() {
   const activeImage = useSelector((state: RootState) => state.image.activeId);
@@ -18,22 +18,30 @@ export function NodesContainer() {
     }
   }, [activeImage, dispatch]);
 
+  function onDragEnd(result: DropResult, provided: ResponderProvided) {
+    if (!result.destination || result.destination.index === result.source.index) return;
+
+    dispatch(moveNodeInList(activeImage??0, nodes[result.source.index].id??0, result.destination.index));
+  }
+
   const show = typeof activeImage !== 'undefined';
   return (
     <>
       {show &&
       <>
-        <div style={{display: 'flex'}}>
-          <Typography variant="h4">Módosítók</Typography>
-          <NewNode style={{marginLeft: 'auto'}}/>
-        </div>
-        <List>
-          <DraggableList>
-            {Object.entries(nodes).map(([nodeId, node]) => (
-              <NodeItem key={nodeId} node={node} />
+        <ContainerHeader />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="list">
+          {provided => (
+            <List ref={provided.innerRef}>
+            {Object.entries(nodes).map(([pos, node]) => (
+              <NodeItem key={pos} node={node} />
             ))}
-          </DraggableList>
-        </List>
+              {provided.placeholder}
+            </List>
+          )}
+          </Droppable>
+        </DragDropContext>
       </>}
     </>
   );

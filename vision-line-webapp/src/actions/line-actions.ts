@@ -8,7 +8,7 @@ import { imageModified } from './image-actions';
 
 function setNodes(dispatch: ThunkDispatch<RootState, undefined, AnyAction>, data: Node[]) {
   const payload: any = {};
-  data.forEach(node => payload[node.id??0] = node);
+  data.forEach(node => payload[node.position??0] = node);
   dispatch({ type: LineAction.SET_ALL_NODES, payload: payload });  
   dispatch(imageModified());
 }
@@ -36,6 +36,36 @@ export function createNodeOnLine(lineId: number, node: Node) {
 export function deleteNodeOnLine(lineId: number, nodeId: number) {
   return (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
     api().linesLineIdNodesNodeIdDelete({lineId, nodeId}).subscribe({next: data => {
+      setNodes(dispatch, data);
+    }, error: error => {
+      console.log('ERROR', error);
+    }});
+  }
+}
+
+export function moveNodeInList(lineId: number, nodeId: number, position: number) {
+  return (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
+    const nodeList: any = {};
+    let movedNode = Object.values(getState().line.nodes??{}).find(n => n.id === nodeId);
+    let counter = 0;
+    Object.entries(getState().line.nodes??{}).forEach(([prevPos, node]) => {
+      if (node.id !== nodeId) {
+        if (counter === position) {
+          movedNode = {...movedNode, position: counter};
+          nodeList[counter] = movedNode;
+          counter++;
+        }
+        nodeList[counter] = {...node, position: counter};
+        counter++;
+      }
+    });
+    dispatch({ type: LineAction.SET_ALL_NODES, payload: nodeList });
+
+    console.log('NEW LIST', nodeList);
+    if (!movedNode) return;
+    console.log('NEW LIST', movedNode);
+
+    api().linesLineIdNodesNodeIdPut({lineId, nodeId, node: movedNode}).subscribe({next: data => {
       setNodes(dispatch, data);
     }, error: error => {
       console.log('ERROR', error);

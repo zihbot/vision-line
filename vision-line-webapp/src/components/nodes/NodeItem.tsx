@@ -1,6 +1,7 @@
-import { Node } from "../../api";
-import { IconButton, ListItem, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
+import { IconButton, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
+import { Draggable } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from 'react-redux';
+import { Node } from "../../api";
 import { deleteNodeOnLine } from '../../actions/line-actions';
 import { RootState } from '../../reducers/root-reducer';
 
@@ -16,14 +17,18 @@ export function NodeItem(props: {node: Node}) {
     <Typography key={key} variant="body1">{key}: <b>{value}</b></Typography>
   ));
 
-  return (    
-    <ListItem button>
-      <ListItemText primary={props.node.name} secondary={inputs} secondaryTypographyProps={{component: 'div'}} />                  
-      <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="delete" color="secondary" onClick={() => deleteItem()}>
-          <span className="material-icons">delete</span>
-        </IconButton>
-      </ListItemSecondaryAction>
-    </ListItem>
+  return (
+    <Draggable draggableId={''+props.node.id} index={props.node.position??0}>
+      {provided => (
+        <ListItem button ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          <ListItemText primary={props.node.name} secondary={inputs} secondaryTypographyProps={{component: 'div'}} />                  
+          <ListItemIcon>
+            <IconButton edge="end" aria-label="delete" color="secondary" onClick={() => deleteItem()}>
+              <span className="material-icons">delete</span>
+            </IconButton>
+          </ListItemIcon>
+        </ListItem>
+      )}
+    </Draggable>
   );
 }
