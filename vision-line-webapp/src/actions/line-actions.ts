@@ -45,26 +45,19 @@ export function deleteNodeOnLine(lineId: number, nodeId: number) {
 
 export function moveNodeInList(lineId: number, nodeId: number, position: number) {
   return (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
-    const nodeList: any = {};
     let movedNode = Object.values(getState().line.nodes??{}).find(n => n.id === nodeId);
-    let counter = 0;
-    Object.entries(getState().line.nodes??{}).forEach(([prevPos, node]) => {
-      if (node.id !== nodeId) {
-        if (counter === position) {
-          movedNode = {...movedNode, position: counter};
-          nodeList[counter] = movedNode;
-          counter++;
-        }
-        nodeList[counter] = {...node, position: counter};
-        counter++;
-      }
-    });
-    dispatch({ type: LineAction.SET_ALL_NODES, payload: nodeList });
-
-    console.log('NEW LIST', nodeList);
     if (!movedNode) return;
-    console.log('NEW LIST', movedNode);
 
+    let nodeList: Node[] = Object.values(getState().line.nodes??{});
+    nodeList.splice(movedNode.position??0, 1);
+    nodeList.splice(position, 0, movedNode);
+    nodeList = nodeList.map((node, index) => ({
+      ...node, position: index
+    }));
+    setNodes(dispatch, nodeList);
+    
+    movedNode = nodeList.find(n => n.id === nodeId);
+    if (!movedNode) return;
     api().linesLineIdNodesNodeIdPut({lineId, nodeId, node: movedNode}).subscribe({next: data => {
       setNodes(dispatch, data);
     }, error: error => {

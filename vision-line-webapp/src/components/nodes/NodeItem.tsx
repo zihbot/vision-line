@@ -18,7 +18,7 @@ export function NodeItem(props: {node: Node}) {
   ));
 
   return (
-    <Draggable draggableId={''+props.node.id} index={props.node.position??0}>
+    <Draggable draggableId={''+props.node.position} index={props.node.position??0}>
       {provided => (
         <ListItem button ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <ListItemText primary={props.node.name} secondary={inputs} secondaryTypographyProps={{component: 'div'}} />                  
