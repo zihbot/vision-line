@@ -1,10 +1,10 @@
 import { Typography } from '@material-ui/core';
-import { NewNode } from './NewNode';
+import { EditNodeDialog } from './EditNodeDialog';
 export function ContainerHeader(props: {}) {
-  return (    
+  return (
     <div style={{display: 'flex'}}>
       <Typography variant="h4">Módosítók</Typography>
-      <NewNode style={{marginLeft: 'auto'}}/>
+      <EditNodeDialog type="add" style={{marginLeft: 'auto'}}/>
     </div>
   );
 }

@@ -9,7 +9,7 @@ import { imageModified } from './image-actions';
 function setNodes(dispatch: ThunkDispatch<RootState, undefined, AnyAction>, data: Node[]) {
   const payload: any = {};
   data.forEach(node => payload[node.position??0] = node);
-  dispatch({ type: LineAction.SET_ALL_NODES, payload: payload });  
+  dispatch({ type: LineAction.SET_ALL_NODES, payload: payload });
   dispatch(imageModified());
 }
 
@@ -26,6 +26,16 @@ export function loadLine(lineId: number) {
 export function createNodeOnLine(lineId: number, node: Node) {
   return (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
     api().linesLineIdNodesPost({lineId, node}).subscribe({next: data => {
+      setNodes(dispatch, data);
+    }, error: error => {
+      console.log('ERROR', error);
+    }});
+  }
+}
+
+export function editNodeOnLine(lineId: number, nodeId: number, node: Node) {
+  return (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
+    api().linesLineIdNodesNodeIdPut({lineId, nodeId, node}).subscribe({next: data => {
       setNodes(dispatch, data);
     }, error: error => {
       console.log('ERROR', error);
@@ -55,7 +65,7 @@ export function moveNodeInList(lineId: number, nodeId: number, position: number)
       ...node, position: index
     }));
     setNodes(dispatch, nodeList);
-    
+
     movedNode = nodeList.find(n => n.id === nodeId);
     if (!movedNode) return;
     api().linesLineIdNodesNodeIdPut({lineId, nodeId, node: movedNode}).subscribe({next: data => {

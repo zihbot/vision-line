@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Node } from "../../api";
 import { deleteNodeOnLine } from '../../actions/line-actions';
 import { RootState } from '../../reducers/root-reducer';
+import { EditNodeDialog } from './EditNodeDialog';
 
 export function NodeItem(props: {node: Node}) {
   const dispatch = useDispatch();
@@ -21,7 +22,8 @@ export function NodeItem(props: {node: Node}) {
     <Draggable draggableId={''+props.node.position} index={props.node.position??0}>
       {provided => (
         <ListItem button ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <ListItemText primary={props.node.name} secondary={inputs} secondaryTypographyProps={{component: 'div'}} />                  
+          <ListItemText primary={props.node.name} secondary={inputs} secondaryTypographyProps={{component: 'div'}} />
+          <ListItemIcon><EditNodeDialog type="edit" node={props.node} /></ListItemIcon>
           <ListItemIcon>
             <IconButton edge="end" aria-label="delete" color="secondary" onClick={() => deleteItem()}>
               <span className="material-icons">delete</span>
