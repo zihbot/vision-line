@@ -12,6 +12,13 @@ export function setActiveImage(id: number): Action {
   }
 }
 
+export function showNode(nodeId?: number): Action {
+  return {
+    type: ImageAction.SHOW_NODE,
+    payload: nodeId,
+  }
+}
+
 export function imageModified(): Action {
   return {
     type: ImageAction.MODIFIED,

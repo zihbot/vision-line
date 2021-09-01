@@ -9,13 +9,21 @@ export function ImageDisplay() {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [imageBlob, setImageBlob] = useState<Blob>();
   const imageId = useSelector((state: RootState) => state.image.activeId);
+  const shownNode = useSelector((state: RootState) => state.image.shownNodeId);
   const modified = useSelector((state: RootState) => state.image.modified);
 
   useEffect(() => {
     if (typeof imageId === 'undefined') return;
     setStatus('loading');
     setImageBlob(undefined);
-    api().imagesLineIdGet({lineId: imageId, lastChange: modified}).subscribe({
+
+    let request;
+    if (typeof shownNode !== 'undefined') {
+      request = api().imagesLineIdNodeIdGet({lineId: imageId, nodeId: shownNode+1, lastChange: modified});
+    } else {
+      request = api().imagesLineIdGet({lineId: imageId, lastChange: modified});
+    }
+    request.subscribe({
       next: data => {
         setImageBlob(data);
       },
@@ -23,12 +31,12 @@ export function ImageDisplay() {
         setStatus('error');
       }
     });
-  }, [imageId, modified]);
+  }, [imageId, modified, shownNode]);
 
   const show = typeof imageId !== 'undefined';
   return (
     <>
-    {show && 
+    {show &&
       <div style={{width: '100%'}}>
         {status === 'loading' &&
         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
@@ -38,9 +46,9 @@ export function ImageDisplay() {
           <MuiAlert severity="error">
             Hibás kép
           </MuiAlert>}
-        {imageBlob && 
-          <img src={URL.createObjectURL(imageBlob)} 
-            onLoad={() => setStatus('loaded')} 
+        {imageBlob &&
+          <img src={URL.createObjectURL(imageBlob)}
+            onLoad={() => setStatus('loaded')}
             onError={() => setStatus('error')}
             style={status === 'loaded' ? {} : {display: 'none'}}
             alt="Current" width="100%" />}
