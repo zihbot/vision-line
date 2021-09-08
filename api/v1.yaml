@@ -4,7 +4,7 @@ info:
   version: '1.0'
 servers:
   - url: http://localhost:5000/api/v1/
-  
+
 paths:
   /functions:
     get:
@@ -39,7 +39,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Line"        
+              $ref: "#/components/schemas/Line"
       responses:
         '200':
           description: OK
@@ -47,6 +47,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Line"
+
+  /lines/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/lineId'
+
+    delete:
+      description: Delete line
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Line"
+
 
   /lines/{lineId}/nodes:
     parameters:
@@ -76,7 +93,7 @@ paths:
       responses:
         '200':
           description: OK
-          content:            
+          content:
             application/json:
               schema:
                 type: array
@@ -159,7 +176,7 @@ components:
     Function:
       type: object
       properties:
-        name: 
+        name:
           type: string
         display:
           type: string

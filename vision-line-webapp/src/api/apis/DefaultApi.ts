@@ -30,6 +30,10 @@ export interface ImagesLineIdNodeIdGetRequest {
     lastChange?: number;
 }
 
+export interface LinesLineIdDeleteRequest {
+    lineId: number;
+}
+
 export interface LinesLineIdNodesGetRequest {
     lineId: number;
 }
@@ -121,6 +125,20 @@ export class DefaultApi extends BaseAPI {
         return this.request<Array<Line>>({
             url: '/lines',
             method: 'GET',
+        }, opts?.responseOpts);
+    };
+
+    /**
+     * Delete line
+     */
+    linesLineIdDelete({ lineId }: LinesLineIdDeleteRequest): Observable<Array<Line>>
+    linesLineIdDelete({ lineId }: LinesLineIdDeleteRequest, opts?: OperationOpts): Observable<RawAjaxResponse<Array<Line>>>
+    linesLineIdDelete({ lineId }: LinesLineIdDeleteRequest, opts?: OperationOpts): Observable<Array<Line> | RawAjaxResponse<Array<Line>>> {
+        throwIfNullOrUndefined(lineId, 'lineId', 'linesLineIdDelete');
+
+        return this.request<Array<Line>>({
+            url: '/lines/{lineId}'.replace('{lineId}', encodeURI(lineId)),
+            method: 'DELETE',
         }, opts?.responseOpts);
     };
 

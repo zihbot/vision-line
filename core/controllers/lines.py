@@ -18,6 +18,11 @@ def post_line():
     new_line = image.add_line(Line.from_dict(request.get_json(True)))
     return jsonify(new_line.to_dict())
 
+@lines_blueprint.route('<line_id>', methods=['DELETE'])
+def delete_line(line_id: str):
+    image.delete_line(int(line_id))
+    return jsonify([l.to_dict() for l in image.lines_to_model()])
+
 @lines_blueprint.route('<line_id>/nodes', methods=['GET'])
 def get_line_nodes(line_id: str):
     return jsonify([n.to_dict() for n in image.nodes_to_model(int(line_id))])

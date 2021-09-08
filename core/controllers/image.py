@@ -17,30 +17,30 @@ def post_create_image_bck(data: list[dict]) -> bytes:
     print(type(img))
     is_success, buffer_array = cv2.imencode('.jpg', img)
     return buffer_array.tobytes()
-    
+
 def post_create_image(data: list[dict]) -> int:
     logger.debug('post_create_image data=%s', data)
     l = _Line(name='xxx', last_change=0, nodes=data)
     lines.append(l)
     return len(lines) - 1
-    
+
 def create_image_add(line_id: int, position: int, data: dict) -> int:
     logger.debug('patch_create_image data=%s', data)
     lines[line_id].nodes.insert(position, data)
     return True
-    
+
 def create_image_edit(line_id: int, position: int, data: dict) -> int:
     logger.debug('create_image_edit data=%s', data)
     lines[line_id].nodes[position] = data
     return True
-    
+
 def create_image_reorder(line_id: int, data: list[int]) -> int:
     logger.debug('create_image_reorder data=%s', data)
     if len(data) != len(lines[line_id]):
         return False
     lines[line_id].nodes = [lines[line_id][i] for i in data]
     return True
-    
+
 def create_image_delete(line_id: int, position: int) -> int:
     logger.debug('patch_create_image line_id=%s, position=%s', line_id, position)
     lines[line_id].nodes.pop(position)
@@ -58,7 +58,7 @@ def get_image(line_id: int, last_node_id: int = None) -> bytes:
         func = FunctionFactory.get_function(node['name'])
         func.set_inputs(node['inputs'] if 'inputs' in node else {})
         img_loc = func.run(img_loc)
-    
+
     is_success, buffer_array = cv2.imencode('.jpg', img_loc)
     return buffer_array.tobytes()
 
@@ -91,6 +91,9 @@ def add_line(line: models.Line) -> models.Line:
     l = _Line(line.name, line.last_change, [])
     lines.append(l)
     return line
+
+def delete_line(line_id: int) -> None:
+    _ = lines.pop(line_id)
 
 def nodes_to_model(line_id: int) -> list[models.Node]:
     result: list[models.Node] = []
