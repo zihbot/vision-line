@@ -4,7 +4,7 @@ import { RootState } from '../reducers/root-reducer';
 import { LineAction } from "../reducers/line-reducer";
 import api from '../services/data-service';
 import { Node } from "../api";
-import { imageModified } from './image-actions';
+import { imageModified, setActiveImage } from './image-actions';
 
 function setNodes(dispatch: ThunkDispatch<RootState, undefined, AnyAction>, data: Node[]) {
   const payload: any = {};
@@ -17,6 +17,16 @@ export function loadLine(lineId: number) {
   return (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
     api().linesLineIdNodesGet({lineId}).subscribe({next: data => {
       setNodes(dispatch, data);
+    }, error: error => {
+      console.log('ERROR', error);
+    }});
+  }
+}
+
+export function deleteLine(lineId: number) {
+  return (dispatch: ThunkDispatch<RootState, undefined, AnyAction>, getState: () => RootState) => {
+    api().linesLineIdDelete({lineId}).subscribe({next: data => {
+      dispatch(setActiveImage(lineId === 0 ? undefined : lineId-1))
     }, error: error => {
       console.log('ERROR', error);
     }});

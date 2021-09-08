@@ -5,7 +5,7 @@ import { RootState } from '../reducers/root-reducer';
 import { AnyAction } from 'redux';
 import api from '../services/data-service';
 
-export function setActiveImage(id: number): Action {
+export function setActiveImage(id: number | undefined): Action {
   return {
     type: ImageAction.SET_ACTIVE_ID,
     payload: id,
