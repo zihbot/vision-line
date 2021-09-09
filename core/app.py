@@ -61,7 +61,7 @@ def get_image_until_last_node(line_id: str, last_node_id: str):
 @root.route('/line/<line_id>', methods=['GET'])
 def get_line(line_id: str):
     return jsonify(controllers.image.get_line(int(line_id)))
-    
+
 @root.route('/line', methods=['GET'])
 def get_lines_node_numbers():
     return jsonify(controllers.image.get_lines_node_numbers())
@@ -69,7 +69,7 @@ def get_lines_node_numbers():
 @root.route('/function', methods=['GET'])
 def get_functions():
     return jsonify(FunctionFactory.get_all_function_inputs())
-    
+
 @root.route('/functions', methods=['GET'])
 def get_all_functions():
     return jsonify([f.to_dict() for f in FunctionFactory.to_list()])

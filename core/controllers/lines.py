@@ -1,3 +1,4 @@
+from repositories.lines import LineORM
 from api import models
 from flask.globals import request
 from api.models.line import Line
@@ -6,11 +7,14 @@ from flask.helpers import send_file
 from flask.json import jsonify
 from controllers import image
 from flask import Blueprint
+import repositories
 
 lines_blueprint = Blueprint('lines', __name__)
 
 @lines_blueprint.route('', methods=['GET'])
 def get_line():
+    lines: list[LineORM] = repositories.lines.LineORM.query.all()
+    #return jsonify([line.nodes for line in lines])
     return jsonify([l.to_dict() for l in image.lines_to_model()])
 
 @lines_blueprint.route('', methods=['POST'])

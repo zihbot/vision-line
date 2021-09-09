@@ -1,0 +1,2 @@
+[default]
+database = {username="CHANGE_IT", password="CHANGE_IT", host="zihbot.ml", port="35654", name="visionline"}
