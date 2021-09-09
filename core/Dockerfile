@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.9-buster
 WORKDIR /app
 
 RUN apt-get update ##[edited]
