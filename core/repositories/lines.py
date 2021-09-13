@@ -16,6 +16,11 @@ class LineORM(Base):
         db_session.commit()
         return self.find_by_id(self.id)
 
+    def update(self):
+        db_session.add(self)
+        db_session.commit()
+        return self.find_by_id(self.id)
+
     def delete(self):
         db_session.delete(self)
         db_session.commit()

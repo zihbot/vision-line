@@ -58,7 +58,8 @@ def create_image_delete(line_id: int, position: int) -> int:
 
 def get_image(line_id: int, last_node_id: int = None) -> bytes:
     logger.debug('get_image id=%s last_node=%s data=%s', line_id, last_node_id, lines[line_id])
-    use_nodes = lines[line_id].nodes
+    line = LineORM.find_by_id(line_id)
+    use_nodes: list = line.nodes[:]
     if last_node_id is not None:
         use_nodes = use_nodes[:last_node_id]
 
@@ -99,7 +100,7 @@ def delete_line(line_id: int) -> None:
 
 def nodes_to_model(line_id: int) -> list[models.Node]:
     result: list[models.Node] = []
-    for i, node in enumerate(lines[line_id].nodes):
+    for i, node in enumerate(LineORM.find_by_id(line_id).nodes):
         result.append(models.Node(
             id=i,
             position=i,
@@ -109,19 +110,34 @@ def nodes_to_model(line_id: int) -> list[models.Node]:
     return result
 
 def add_node(line_id: int, node: models.Node) -> None:
-    nodes: list = lines[line_id].nodes
+    line = LineORM.find_by_id(line_id)
+    nodes: list = line.nodes[:]
+
     n = {'name': node.name, 'inputs': node.inputs}
     nodes.insert(node.position, n)
-    lines[line_id] = lines[line_id]._replace(nodes=nodes, last_change=time_ms())
+
+    line.last_change = time_ms()
+    line.nodes = nodes
+    line.update()
 
 def put_node(line_id: int, node_id: int, node: models.Node) -> None:
-    nodes: list = lines[line_id].nodes
+    line = LineORM.find_by_id(line_id)
+    nodes: list = line.nodes[:]
+
     nodes.pop(node_id)
     n = {'name': node.name, 'inputs': node.inputs}
     nodes.insert(node.position, n)
-    lines[line_id] = lines[line_id]._replace(nodes=nodes, last_change=time_ms())
+
+    line.last_change = time_ms()
+    line.nodes = nodes
+    line.update()
 
 def delete_node(line_id: int, node_id: int) -> None:
-    nodes: list = lines[line_id].nodes
+    line = LineORM.find_by_id(line_id)
+    nodes: list = line.nodes[:]
+
     nodes.pop(node_id)
-    lines[line_id] = lines[line_id]._replace(nodes=nodes, last_change=time_ms())
+
+    line.last_change = time_ms()
+    line.nodes = nodes
+    line.update()
