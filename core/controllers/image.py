@@ -57,7 +57,7 @@ def create_image_delete(line_id: int, position: int) -> int:
     return True
 
 def get_image(line_id: int, last_node_id: int = None) -> bytes:
-    logger.debug('get_image id=%s last_node=%s data=%s', line_id, last_node_id, lines[line_id])
+    logger.debug('get_image id=%s last_node=%s', line_id, last_node_id)
     line = LineORM.find_by_id(line_id)
     use_nodes: list = line.nodes[:]
     if last_node_id is not None:
