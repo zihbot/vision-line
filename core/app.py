@@ -1,3 +1,4 @@
+from repositories import database
 from function_factory import FunctionFactory
 import io
 from collections import namedtuple
@@ -77,3 +78,7 @@ def get_all_functions():
 app.register_blueprint(images_blueprint, url_prefix='/api/v1/images')
 app.register_blueprint(lines_blueprint, url_prefix='/api/v1/lines')
 app.register_blueprint(root, url_prefix='/api/v1')
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    database.teardown_db()
