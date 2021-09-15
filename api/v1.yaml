@@ -172,6 +172,12 @@ components:
           type: string
         type:
           type: string
+        values:
+          type: array
+          items:
+            type: object
+        regex:
+          type: string
 
     Function:
       type: object

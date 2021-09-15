@@ -15,7 +15,7 @@ class FunctionInput(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name:str = None, display:str = None, type:str = None):  # noqa: E501
+    def __init__(self, name:str = None, display:str = None, type:str = None, values:List[object] = None, regex:str = None):  # noqa: E501
         """FunctionInput - a model defined in OpenAPI
 
         :param name: The name of this FunctionInput.  # noqa: E501
@@ -24,22 +24,32 @@ class FunctionInput(Model):
         :type display: str
         :param type: The type of this FunctionInput.  # noqa: E501
         :type type: str
+        :param values: The values of this FunctionInput.  # noqa: E501
+        :type values: List[object]
+        :param regex: The regex of this FunctionInput.  # noqa: E501
+        :type regex: str
         """
         self.openapi_types = {
             'name': str,
             'display': str,
-            'type': str
+            'type': str,
+            'values': List[object],
+            'regex': str
         }
 
         self.attribute_map = {
             'name': 'name',
             'display': 'display',
-            'type': 'type'
+            'type': 'type',
+            'values': 'values',
+            'regex': 'regex'
         }
 
         self._name = name
         self._display = display
         self._type = type
+        self._values = values
+        self._regex = regex
 
     @classmethod
     def from_dict(cls, dikt) -> 'FunctionInput':
@@ -114,3 +124,45 @@ class FunctionInput(Model):
         """
 
         self._type = type
+
+    @property
+    def values(self):
+        """Gets the values of this FunctionInput.
+
+
+        :return: The values of this FunctionInput.
+        :rtype: List[object]
+        """
+        return self._values
+
+    @values.setter
+    def values(self, values):
+        """Sets the values of this FunctionInput.
+
+
+        :param values: The values of this FunctionInput.
+        :type values: List[object]
+        """
+
+        self._values = values
+
+    @property
+    def regex(self):
+        """Gets the regex of this FunctionInput.
+
+
+        :return: The regex of this FunctionInput.
+        :rtype: str
+        """
+        return self._regex
+
+    @regex.setter
+    def regex(self, regex):
+        """Sets the regex of this FunctionInput.
+
+
+        :param regex: The regex of this FunctionInput.
+        :type regex: str
+        """
+
+        self._regex = regex

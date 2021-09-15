@@ -31,4 +31,14 @@ export interface FunctionInput {
      * @memberof FunctionInput
      */
     type?: string;
+    /**
+     * @type {Array<object>}
+     * @memberof FunctionInput
+     */
+    values?: Array<object>;
+    /**
+     * @type {string}
+     * @memberof FunctionInput
+     */
+    regex?: string;
 }

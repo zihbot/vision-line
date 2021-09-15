@@ -8,7 +8,6 @@ import hashlib
 import requests
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 class BaseFunction():
     def __init__(self, path: str) -> None:
@@ -19,7 +18,7 @@ class BaseFunction():
     def set_inputs(self, inputs: dict[str, str]):
         # TODO: check validity
         self.inputs = inputs
-    
+
     def run(self, img_loc: np.ndarray) -> np.ndarray:
         global img
         img = img_loc

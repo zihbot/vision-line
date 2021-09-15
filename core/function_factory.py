@@ -40,8 +40,10 @@ class FunctionFactory():
                 iname, ival = next(iter(input.items()))
                 inputs.append(models.FunctionInput(
                     name=iname,
-                    display=iname,
-                    type=ival['type']
+                    display=ival.get('display', iname),
+                    type=ival.get('type', 'string'),
+                    values=ival.get('values', None),
+                    regex=ival.get('regex', None)
                 ))
 
             item = models.Function(
