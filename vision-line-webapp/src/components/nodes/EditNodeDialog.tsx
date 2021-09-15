@@ -1,11 +1,12 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, TextField, IconButton } from '@material-ui/core';
-import { useState, useEffect, ChangeEvent } from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, IconButton } from '@material-ui/core';
+import { useState, useEffect } from 'react';
 import { Function } from '../../api/models/Function';
 import api from '../../services/data-service';
 import { createNodeOnLine, editNodeOnLine } from '../../actions/line-actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../reducers/root-reducer';
 import { Node } from '../../api/models/Node';
+import { FunctionInputFormField } from './FunctionInputFormField';
 
 export function EditNodeDialog({type, node, ...additionalProps}: {
   type: 'add' | 'edit',
@@ -81,9 +82,8 @@ export function EditNodeDialog({type, node, ...additionalProps}: {
   }
 
   const params = functions.all.find(f => f.name === functions.selected)?.inputs?.map((input, i) => (
-    <TextField id={input.name + "Param"} label={input.display} required autoFocus={i===0}
-          value={parameters[input.name??''] ?? ''} key={input.name}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => handleInputChange(input.name??'', e.target.value)}/>
+    <FunctionInputFormField input={input} autoFocus={i===0} value={parameters[input.name??''] ?? ''} key={input.name}
+          onChange={e => handleInputChange(input.name??'', e.target.value)}/>
   )) ?? <></>;
 
   return (
